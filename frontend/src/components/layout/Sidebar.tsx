@@ -93,15 +93,15 @@ export function Sidebar() {
 
       {/* ── Brand Logo ─────────────────────────────── */}
       <div className="h-20 flex items-center px-6 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm">
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm group-hover:bg-indigo-500 transition-colors">
             <TrendingUp className="w-4 h-4 text-white" />
           </div>
           <div>
-            <div className="font-bold text-base tracking-tight text-slate-900 leading-none">Quantan</div>
-            <div className="text-[10px] font-semibold text-indigo-500 uppercase tracking-widest">AI Terminal</div>
+            <div className="font-bold text-base tracking-tight text-slate-900 leading-none group-hover:text-indigo-600 transition-colors">QuantVision</div>
+            <div className="text-[10px] font-semibold text-indigo-500 uppercase tracking-widest mt-0.5">AI Terminal</div>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* ── Navigation ─────────────────────────────── */}
