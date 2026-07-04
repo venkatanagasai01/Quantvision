@@ -18,14 +18,9 @@ from app.main import app
 from app.db.database import get_db, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.core.security import pwd_context
 
-pwd_context.hash = lambda x: x + "_hashed"
-pwd_context.verify = lambda x, y: (x + "_hashed") == y
-
-# Mock MarketDataService directly to avoid yfinance call
-from app.services.market_data.market_data_service import MarketDataService
-MarketDataService.fetch_stock_data = MagicMock(return_value={"current_price": 150.0, "name": "Apple Inc."})
+from unittest.mock import MagicMock, AsyncMock, patch
+# We will use patch in fixtures/tests instead
 
 # Database setup
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_trading.db"
@@ -39,11 +34,17 @@ def override_get_db():
     finally:
         db.close()
 
-app.dependency_overrides[get_db] = override_get_db
 client = TestClient(app)
+
+@pytest.fixture(scope="module", autouse=True)
+def mock_market_data():
+    with patch("app.api.routers.paper_trading.MarketDataService.fetch_stock_data", new_callable=AsyncMock) as mock_fetch:
+        mock_fetch.return_value = {"current_price": 150.0, "name": "Apple Inc."}
+        yield mock_fetch
 
 @pytest.fixture(scope="module")
 def setup_trading_users():
+    app.dependency_overrides[get_db] = override_get_db
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     

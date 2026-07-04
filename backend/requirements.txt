@@ -5,9 +5,11 @@ python-dotenv>=1.0.1
 yfinance
 pandas
 numpy
-pandas-ta
 sqlalchemy>=2.0.29
 alembic>=1.13.1
 psycopg2-binary>=2.9.9
 transformers>=4.38.0
 torch>=2.2.0
+cachetools>=5.3.3
+google-generativeai
+ddgs

@@ -69,8 +69,8 @@ class TechnicalAnalysisService:
             macd_val = float(latest['MACD_12_26_9']) if pd.notna(latest['MACD_12_26_9']) else 0.0
             macd_sig = float(latest['MACDs_12_26_9']) if pd.notna(latest['MACDs_12_26_9']) else 0.0
             macd_hist = float(latest['MACDh_12_26_9']) if pd.notna(latest['MACDh_12_26_9']) else 0.0
-            sma50 = float(latest['SMA_50']) if pd.notna(latest['SMA_50']) else 0.0
-            sma200 = float(latest['SMA_200']) if pd.notna(latest['SMA_200']) else 0.0
+            sma50 = float(latest['SMA_50']) if pd.notna(latest['SMA_50']) else None
+            sma200 = float(latest['SMA_200']) if pd.notna(latest['SMA_200']) else None
             atr = float(latest['ATRr_14']) if pd.notna(latest['ATRr_14']) else 0.0
             price = float(latest['Close'])
             
@@ -89,9 +89,9 @@ class TechnicalAnalysisService:
             latest_volume = float(latest['Volume'])
             volume_ratio = latest_volume / avg_volume_20 if avg_volume_20 > 0 else 1.0
 
-            # Trend classification
+            # Trend classification (Safe against NaNs for new stocks)
             trend = "Neutral"
-            if sma50 > 0 and sma200 > 0:
+            if sma50 is not None and sma200 is not None:
                 if sma50 > sma200 and price > sma50:
                     trend = "Bullish"
                 elif sma50 < sma200 and price < sma50:
@@ -100,6 +100,12 @@ class TechnicalAnalysisService:
                     trend = "Strong Bullish"
                 elif price < sma50 < sma200:
                     trend = "Strong Bearish"
+            elif sma50 is not None:
+                # Fallback if SMA200 is unavailable (e.g. IPO < 200 days ago)
+                if price > sma50:
+                    trend = "Bullish"
+                elif price < sma50:
+                    trend = "Bearish"
 
             # MACD crossover detection
             macd_crossover = "Neutral"
@@ -168,8 +174,8 @@ class TechnicalAnalysisService:
                 "macd_signal_val": round(macd_sig, 4),
                 "macd_histogram": round(macd_hist, 4),
                 "macd_signal": macd_crossover,
-                "sma50": round(sma50, 2),
-                "sma200": round(sma200, 2),
+                "sma50": round(sma50, 2) if sma50 is not None else 0.0,
+                "sma200": round(sma200, 2) if sma200 is not None else 0.0,
                 "atr": round(atr, 2),
                 "trend": trend,
                 "volatility": volatility,

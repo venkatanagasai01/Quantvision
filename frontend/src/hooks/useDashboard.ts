@@ -1,17 +1,19 @@
 import { fetchWithAuth } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const API_BASE = 'http://localhost:8000/api';
+// Use relative path so Next.js proxy handles routing to the backend
+const API_BASE = '/api/backend';
 
 export function useMarketOverview() {
   return useQuery({
     queryKey: ['market-overview'],
     queryFn: async () => {
-      const response = await fetchWithAuth(`${API_BASE}/dashboard/market-overview`);
+      const response = await fetch(`${API_BASE}/dashboard/market-overview`);
       if (!response.ok) throw new Error('Failed to fetch market overview');
       return response.json();
     },
     staleTime: 60000,
+    retry: 1,
   });
 }
 
@@ -24,6 +26,7 @@ export function usePortfolioSummary() {
       return response.json();
     },
     staleTime: 60000,
+    retry: 1,
   });
 }
 
@@ -38,6 +41,7 @@ export function useAlerts() {
       return response.json();
     },
     staleTime: 30000,
+    retry: 1,
   });
 }
 
@@ -50,6 +54,7 @@ export function useEquityCurve() {
       return response.json();
     },
     staleTime: 60000,
+    retry: 1,
   });
 }
 
@@ -62,5 +67,6 @@ export function useLatestExplainability() {
       return response.json();
     },
     staleTime: 60000,
+    retry: 1,
   });
 }

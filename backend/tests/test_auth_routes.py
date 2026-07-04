@@ -1,6 +1,7 @@
 import pytest
 import sys
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock, patch
+import pandas as pd
 sys.modules['pandas_ta'] = MagicMock()
 sys.modules['yfinance'] = MagicMock()
 sys.modules['xgboost'] = MagicMock()
@@ -17,10 +18,6 @@ from app.main import app
 from app.db.database import get_db, Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.core.security import pwd_context
-
-pwd_context.hash = lambda x: x + "_hashed"
-pwd_context.verify = lambda x, y: (x + "_hashed") == y
 
 # Set up test database
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test_quantan.db"
@@ -41,6 +38,26 @@ app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
 
+from app.services.market_data.market_data_service import MarketDataService
+
+@pytest.fixture(scope="module", autouse=True)
+def mock_market_data():
+    with patch("app.api.routers.stocks.MarketDataService.fetch_stock_data", new_callable=AsyncMock) as mock_fetch:
+        # Mock what analyze_stock expects
+        mock_fetch.return_value = {
+            "historical": pd.DataFrame(),
+            "benchmark_historical": pd.DataFrame(),
+            "current_price": 150.0,
+            "volume": 1000000,
+            "market_cap": 2500000000000,
+            "currency": "USD",
+            "pe_ratio": 28.5,
+            "eps": 5.5,
+            "forward_eps": 6.5,
+            "beta": 1.1
+        }
+        yield mock_fetch
+
 @pytest.fixture(scope="module")
 def setup_users():
     # Register User A
@@ -49,6 +66,7 @@ def setup_users():
         "email": "a@example.com",
         "password": "password123"
     })
+    assert res_a.status_code == 200, res_a.text
     token_a = res_a.json()["access_token"]
     
     # Register User B
@@ -57,6 +75,7 @@ def setup_users():
         "email": "b@example.com",
         "password": "password123"
     })
+    assert res_b.status_code == 200, res_b.text
     token_b = res_b.json()["access_token"]
     
     return {"token_a": token_a, "token_b": token_b}

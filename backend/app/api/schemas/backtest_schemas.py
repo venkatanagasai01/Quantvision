@@ -3,11 +3,11 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 
 class BacktestRequest(BaseModel):
-    symbol: str = Field(..., example="TCS.NS")
-    benchmark: str = Field(..., example="^NSEI")
-    start_date: str = Field(..., example="2023-01-01")
-    end_date: str = Field(..., example="2024-01-01")
-    initial_capital: float = Field(10000.0, example=10000.0)
+    symbol: str = Field(..., json_schema_extra={"example": "TCS.NS"})
+    benchmark: str = Field(..., json_schema_extra={"example": "^NSEI"})
+    start_date: str = Field(..., json_schema_extra={"example": "2023-01-01"})
+    end_date: str = Field(..., json_schema_extra={"example": "2024-01-01"})
+    initial_capital: float = Field(10000.0, json_schema_extra={"example": 10000.0})
 
 class BacktestSummaryResponse(BaseModel):
     backtest_id: int

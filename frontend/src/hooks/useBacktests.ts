@@ -19,7 +19,7 @@ export function useBacktests(page: number = 1, pageSize: number = 20, symbol?: s
       });
       if (symbol) params.append('symbol', symbol);
       
-      const response = await api.get(`/api/backtests?${params.toString()}`);
+      const response = await api.get(`/backtests?${params.toString()}`);
       return response.data;
     },
   });
@@ -29,7 +29,7 @@ export function useBacktestReport(id: number) {
   return useQuery({
     queryKey: ['backtestReport', id],
     queryFn: async () => {
-      const response = await api.get(`/api/backtests/${id}/report`);
+      const response = await api.get(`/backtests/${id}/report`);
       return response.data;
     },
     enabled: !!id,
@@ -41,11 +41,10 @@ export function useRunBacktest() {
 
   return useMutation({
     mutationFn: async (data: BacktestRequest) => {
-      const response = await api.post('/api/backtests/run', data);
+      const response = await api.post('/backtests/run', data);
       return response.data;
     },
     onSuccess: () => {
-      // Invalidate the list so the table refreshes
       queryClient.invalidateQueries({ queryKey: ['backtests'] });
     },
   });
@@ -56,7 +55,7 @@ export function useDeleteBacktest() {
 
   return useMutation({
     mutationFn: async (id: number) => {
-      const response = await api.delete(`/api/backtests/${id}`);
+      const response = await api.delete(`/backtests/${id}`);
       return response.data;
     },
     onSuccess: () => {

@@ -17,13 +17,13 @@ import {
 } from "@/hooks/useWatchlist";
 
 export default function DashboardPage() {
-  const { data: recentRuns, isLoading: isRunsLoading } = useBacktests(1, 5);
+  const { data: recentRuns, isLoading: isRunsLoading, isError: isRunsError } = useBacktests(1, 5);
   const { data: marketData, isLoading: isMarketLoading, isError: isMarketError } = useMarketOverview();
-  const { data: portfolioSummary, isLoading: isSummaryLoading } = usePortfolioSummary();
-  const { data: watchlistData, isLoading: isWatchlistLoading } = useWatchlist();
-  const { data: alertsData, isLoading: isAlertsLoading } = useAlerts();
-  const { data: equityData, isLoading: isEquityLoading } = useEquityCurve();
-  const { data: explainabilityData, isLoading: isExplainabilityLoading } = useLatestExplainability();
+  const { data: portfolioSummary, isLoading: isSummaryLoading, isError: isSummaryError } = usePortfolioSummary();
+  const { data: watchlistData, isLoading: isWatchlistLoading, isError: isWatchlistError } = useWatchlist();
+  const { data: alertsData, isLoading: isAlertsLoading, isError: isAlertsError } = useAlerts();
+  const { data: equityData, isLoading: isEquityLoading, isError: isEquityError } = useEquityCurve();
+  const { data: explainabilityData, isLoading: isExplainabilityLoading, isError: isExplainabilityError } = useLatestExplainability();
   const { addSymbol, removeSymbol } = useWatchlistMutations();
 
   const [newSymbol, setNewSymbol] = useState("");
@@ -36,7 +36,8 @@ export default function DashboardPage() {
     }
   };
 
-  const isAnyLoading = isRunsLoading || isMarketLoading || isSummaryLoading || isWatchlistLoading || isAlertsLoading || isEquityLoading;
+  // Don't count errored queries as loading — prevents infinite "Syncing..." state
+  const isAnyLoading = (isRunsLoading && !isRunsError) || (isMarketLoading && !isMarketError) || (isSummaryLoading && !isSummaryError) || (isWatchlistLoading && !isWatchlistError) || (isAlertsLoading && !isAlertsError) || (isEquityLoading && !isEquityError);
 
   const marketCards = marketData && !isMarketError ? [
     { name: "NIFTY 50", ...marketData.nifty },
@@ -143,36 +144,36 @@ export default function DashboardPage() {
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Avg Return</div>
                 {isSummaryLoading ? <div className="h-6 w-16 bg-slate-200 animate-pulse rounded"></div> : (
-                  <div className={`text-lg font-bold ${portfolioSummary?.avg_return >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {portfolioSummary?.avg_return > 0 ? '+' : ''}{portfolioSummary?.avg_return.toFixed(2)}%
+                  <div className={`text-lg font-bold ${(portfolioSummary?.avg_return ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {(portfolioSummary?.avg_return ?? 0) > 0 ? '+' : ''}{(portfolioSummary?.avg_return ?? 0).toFixed(2)}%
                   </div>
                 )}
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Win Rate</div>
                 {isSummaryLoading ? <div className="h-6 w-16 bg-slate-200 animate-pulse rounded"></div> : (
-                  <div className="text-lg font-bold text-slate-900">{portfolioSummary?.avg_win_rate.toFixed(1)}%</div>
+                  <div className="text-lg font-bold text-slate-900">{(portfolioSummary?.avg_win_rate ?? 0).toFixed(1)}%</div>
                 )}
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Avg Sharpe</div>
                 {isSummaryLoading ? <div className="h-6 w-16 bg-slate-200 animate-pulse rounded"></div> : (
-                  <div className="text-lg font-bold text-slate-900">{portfolioSummary?.avg_sharpe.toFixed(2)}</div>
+                  <div className="text-lg font-bold text-slate-900">{(portfolioSummary?.avg_sharpe ?? 0).toFixed(2)}</div>
                 )}
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">CAGR</div>
                 {isSummaryLoading ? <div className="h-6 w-16 bg-slate-200 animate-pulse rounded"></div> : (
-                  <div className={`text-lg font-bold ${portfolioSummary?.cagr >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {portfolioSummary?.cagr > 0 ? '+' : ''}{portfolioSummary?.cagr.toFixed(2)}%
+                  <div className={`text-lg font-bold ${(portfolioSummary?.cagr ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {(portfolioSummary?.cagr ?? 0) > 0 ? '+' : ''}{(portfolioSummary?.cagr ?? 0).toFixed(2)}%
                   </div>
                 )}
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Alpha</div>
                 {isSummaryLoading ? <div className="h-6 w-16 bg-slate-200 animate-pulse rounded"></div> : (
-                  <div className={`text-lg font-bold ${portfolioSummary?.alpha >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
-                    {portfolioSummary?.alpha > 0 ? '+' : ''}{portfolioSummary?.alpha.toFixed(2)}%
+                  <div className={`text-lg font-bold ${(portfolioSummary?.alpha ?? 0) >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                    {(portfolioSummary?.alpha ?? 0) > 0 ? '+' : ''}{(portfolioSummary?.alpha ?? 0).toFixed(2)}%
                   </div>
                 )}
               </div>
@@ -303,7 +304,7 @@ export default function DashboardPage() {
               <span className="text-xs font-medium bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md">SHAP AI</span>
             </div>
             <div className="p-6">
-              {isExplainabilityLoading ? (
+              {(isExplainabilityLoading && !isExplainabilityError) ? (
                 <div className="animate-pulse flex flex-col gap-3">
                   <div className="h-4 bg-slate-200 rounded w-3/4"></div>
                   <div className="h-4 bg-slate-200 rounded w-1/2"></div>

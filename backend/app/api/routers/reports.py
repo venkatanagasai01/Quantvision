@@ -11,6 +11,8 @@ from app.core.security import get_current_user
 
 router = APIRouter(prefix="/api/reports", tags=["Reports"])
 
+from pydantic import ConfigDict
+
 class ResearchReportResponse(BaseModel):
     id: int
     symbol: str
@@ -18,8 +20,7 @@ class ResearchReportResponse(BaseModel):
     confidence_score: float
     generated_at: str
     
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 class ResearchReportDetail(ResearchReportResponse):
     report_json: dict

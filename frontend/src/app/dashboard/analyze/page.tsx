@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { Search, Sparkles, TrendingUp, History } from "lucide-react";
 import { useStockAnalysis } from "@/hooks/useAnalysis";
 import { useHistoricalData } from "@/hooks/useHistoricalData";
@@ -20,14 +22,22 @@ import { RecommendationTimeline } from "@/components/charts/RecommendationTimeli
 import { SentimentTimeline } from "@/components/charts/SentimentTimeline";
 import { INDIAN_STOCKS } from "@/constants/stocks";
 
-export default function AnalysisPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeSymbol, setActiveSymbol] = useState("");
+import { Suspense } from "react";
 
-  const { data: analysisData, isLoading: analysisLoading, isError: analysisError } = useStockAnalysis(activeSymbol);
-  const { data: historyData, isLoading: historyLoading } = useHistoricalData(activeSymbol);
-  const { data: signalsData, isLoading: signalsLoading } = useBacktestSignals(activeSymbol);
-  const { data: sentimentData, isLoading: sentimentLoading } = useSentimentData(activeSymbol);
+function AnalysisContent() {
+  const searchParams = useSearchParams();
+  const initialSymbol = searchParams.get("symbol") || "";
+  
+  const [searchQuery, setSearchQuery] = useState(initialSymbol);
+  const [activeSymbol, setActiveSymbol] = useState(initialSymbol);
+
+  const { data: session, status } = useSession();
+  const token = (session as any)?.accessToken;
+  const { data: analysisData, isLoading: analysisLoading, isError: analysisError } = useStockAnalysis(activeSymbol, token);
+  const { data: historyData, isLoading: historyLoading } = useHistoricalData(activeSymbol, token);
+  const { data: signalsData, isLoading: signalsLoading } = useBacktestSignals(activeSymbol, token);
+  const { data: sentimentData, isLoading: sentimentLoading } = useSentimentData(activeSymbol, token);
+  console.log("[AnalysisPage] Session status:", status, "Session data:", session);
 
   const trendingStocks = ["TCS.NS", "INFY.NS", "RELIANCE.NS", "HDFCBANK.NS"];
   const recentSearches = ["AAPL", "NVDA", "TSLA"];
@@ -132,8 +142,8 @@ export default function AnalysisPage() {
                   </li>
                 ))}
                 
-                {/* Always allow searching the exact typed ticker */}
-                {filteredStocks.length === 0 && (
+                {/* Always allow searching the exact typed ticker if it doesn't perfectly match a known symbol */}
+                {!filteredStocks.find(s => s.symbol.toLowerCase() === searchQuery.toLowerCase()) && (
                   <li>
                     <button
                       type="button"
@@ -141,7 +151,7 @@ export default function AnalysisPage() {
                         setActiveSymbol(searchQuery.toUpperCase());
                         setShowDropdown(false);
                       }}
-                      className="w-full text-left px-6 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-3 text-indigo-700"
+                      className="w-full text-left px-6 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-3 text-indigo-700 border-t border-slate-100"
                     >
                       <Search className="w-4 h-4" />
                       <span>Search for <strong>{searchQuery.toUpperCase()}</strong></span>
@@ -252,5 +262,13 @@ export default function AnalysisPage() {
       )}
 
     </div>
+  );
+}
+
+export default function AnalysisPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">Loading analysis terminal...</div>}>
+      <AnalysisContent />
+    </Suspense>
   );
 }

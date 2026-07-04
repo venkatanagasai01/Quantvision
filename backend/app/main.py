@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import engine, Base
 from app.api.routers import stocks, sentiment, backtests, dashboard, watchlist, reports, settings, ml, auth, paper_trading
+
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)
@@ -11,7 +12,7 @@ app = FastAPI(title="Quantan AI Backend", version="1.0.0")
 # Setup CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origin_regex=".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

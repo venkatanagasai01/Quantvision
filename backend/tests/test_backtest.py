@@ -4,8 +4,10 @@ import numpy as np
 from datetime import datetime, timedelta
 
 from app.services.backtesting.historical_simulation import HistoricalSimulationEngine
+from unittest.mock import patch
 
-def test_historical_simulation_engine_no_lookahead_bias():
+@patch('app.services.backtesting.historical_simulation.yf.Ticker')
+def test_historical_simulation_engine_no_lookahead_bias(mock_ticker):
     """
     Tests that the simulation engine correctly chunks the dataframe and produces
     the expected output schema without crashing.
@@ -21,6 +23,19 @@ def test_historical_simulation_engine_no_lookahead_bias():
     start_str = start_date.strftime("%Y-%m-%d")
     end_str = end_date.strftime("%Y-%m-%d")
     
+    # Provide mock yfinance data (include 300 days warmup)
+    warmup_start = start_date - timedelta(days=300)
+    dates = pd.date_range(warmup_start.strftime("%Y-%m-%d"), end_str, freq="B")
+    mock_df = pd.DataFrame(index=dates, data={
+        'Open': [100.0] * len(dates),
+        'High': [105.0] * len(dates),
+        'Low': [95.0] * len(dates),
+        'Close': [100.0] * len(dates),
+        'Volume': [1000] * len(dates),
+    })
+    mock_ticker.return_value.history.return_value = mock_df
+    mock_ticker.return_value.info = {'beta': 1.0}
+
     try:
         results = HistoricalSimulationEngine.run_simulation(
             symbol=symbol,

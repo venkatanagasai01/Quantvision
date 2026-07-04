@@ -4,12 +4,15 @@ from typing import Dict, Any
 
 class RiskAnalysisService:
     """
-    Calculates Volatility, Drawdown, and Beta risk scores.
+    Calculates Volatility, Drawdown, and dynamic Beta risk scores.
     """
 
     @staticmethod
-    def analyze(hist_data: pd.DataFrame, beta: float) -> Dict[str, Any]:
+    def analyze(market_data: Dict[str, Any]) -> Dict[str, Any]:
         try:
+            hist_data = market_data['historical']
+            benchmark_hist = market_data.get('benchmark_historical')
+            
             # Calculate daily returns
             returns = hist_data['Close'].pct_change().dropna()
             
@@ -22,8 +25,21 @@ class RiskAnalysisService:
             drawdown = (cumulative_returns - peak) / peak
             max_drawdown = drawdown.min()
 
+            # Dynamic Beta Calculation
+            beta = 1.0
+            if benchmark_hist is not None and not benchmark_hist.empty:
+                bench_returns = benchmark_hist['Close'].pct_change().dropna()
+                aligned = pd.concat([returns, bench_returns], axis=1, join='inner').dropna()
+                if len(aligned) > 30: # Ensure enough data points
+                    cov = aligned.cov().iloc[0, 1]
+                    var = aligned.iloc[:, 1].var()
+                    if var > 0:
+                        beta = cov / var
+            else:
+                # Fallback to API provided beta if benchmark missing
+                beta = market_data.get('beta', 1.0)
+
             # Risk Score Logic (Lower risk = Higher score 0-100)
-            # High volatility/drawdown/beta lowers the score.
             score = 100
             
             if volatility > 0.4: score -= 30

@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
+import { fetchWithAuth } from '@/lib/api';
+
+const API_BASE = '/api/backend';
 
 export interface AnalysisResponse {
   symbol: string;
@@ -15,14 +17,27 @@ export interface AnalysisResponse {
   risk_factors: string[];
 }
 
-export function useStockAnalysis(symbol: string) {
+export function useStockAnalysis(symbol: string, token?: string) {
   return useQuery({
     queryKey: ['analyze', symbol],
     queryFn: async () => {
-      const response = await api.get<AnalysisResponse>(`/api/stocks/analyze/${symbol}`);
-      return response.data;
+      if (!token) throw new Error("No auth token available");
+      const headers = new Headers();
+      headers.set('Authorization', `Bearer ${token}`);
+      const response = await fetch(`${API_BASE}/stocks/analyze/${symbol}`, { headers });
+      if (response.status === 401) {
+        // Token is invalid/expired in the backend, but NextAuth still thinks we are logged in.
+        // Force a logout to clear the bad NextAuth session cookie.
+        if (typeof window !== 'undefined') {
+          const { signOut } = await import("next-auth/react");
+          await signOut({ callbackUrl: "/login" });
+        }
+        throw new Error("Session expired. Logging out...");
+      }
+      if (!response.ok) throw new Error(`Failed to analyze ${symbol}`);
+      return response.json() as Promise<AnalysisResponse>;
     },
-    enabled: !!symbol, // Only fetch if a symbol is provided
+    enabled: !!symbol && !!token,
     retry: 1,
   });
 }

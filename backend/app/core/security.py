@@ -32,6 +32,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    print(f"DEBUG get_current_user: Received token of length {len(token) if token else 0}")
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -43,12 +44,15 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         if user_id_str is None:
             raise credentials_exception
         user_id = int(user_id_str)
-    except JWTError:
+    except JWTError as e:
+        print(f"DEBUG get_current_user: JWTError - {e}")
         raise credentials_exception
-    except ValueError:
+    except ValueError as e:
+        print(f"DEBUG get_current_user: ValueError - {e}")
         raise credentials_exception
         
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
+        print(f"DEBUG get_current_user: User {user_id} not found in DB")
         raise credentials_exception
     return user

@@ -6,13 +6,13 @@ from app.services.market_data.market_data_service import MarketDataService
 
 class ExecutionService:
     @staticmethod
-    def execute_market_order(db: Session, portfolio: Portfolio, symbol: str, action: str, shares: float):
+    async def execute_market_order(db: Session, portfolio: Portfolio, symbol: str, action: str, shares: float):
         action = action.upper()
         if action not in ["BUY", "SELL"]:
             raise ValueError("Action must be BUY or SELL")
             
         # 1. Fetch current live price
-        market_data = MarketDataService.fetch_stock_data(symbol)
+        market_data = await MarketDataService.fetch_stock_data(symbol)
         if not market_data:
             raise ValueError(f"Could not fetch market data for {symbol}")
             

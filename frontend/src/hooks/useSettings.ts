@@ -1,7 +1,7 @@
 import { fetchWithAuth } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const API_BASE = 'http://localhost:8000/api/settings';
+const API_BASE = '/api/backend/settings';
 
 export function useProfile() {
   return useQuery({

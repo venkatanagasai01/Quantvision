@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 import yfinance as yf
 
 from app.db.database import get_db
@@ -25,8 +25,7 @@ class WatchlistResponse(BaseModel):
     sentiment_score: float
     added_at: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 @router.get("", response_model=List[WatchlistResponse])
 def get_watchlist(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

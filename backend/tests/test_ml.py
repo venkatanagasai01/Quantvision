@@ -5,9 +5,22 @@ import pandas as pd
 import numpy as np
 from app.api.routers.ml import router as ml_router
 
+from app.core.security import get_current_user
+from app.models.db_models import User
+
 app = FastAPI()
 app.include_router(ml_router)
+
+def override_get_current_user():
+    return User(id=1, email="test@example.com")
+
 client = TestClient(app)
+
+@pytest.fixture(scope="module", autouse=True)
+def clear_overrides():
+    app.dependency_overrides[get_current_user] = override_get_current_user
+    yield
+    app.dependency_overrides = {}
 
 def test_feature_engineering_structure():
     from app.ml.feature_engineering import generate_features

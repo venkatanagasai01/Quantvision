@@ -42,8 +42,8 @@ export function StockSearch() {
   const handleSelect = (symbol: string) => {
     setQuery("");
     setIsOpen(false);
-    // Navigate to the stock analysis page
-    router.push(`/dashboard/stock/${symbol}`);
+    // Navigate to the live analysis page with the search symbol
+    router.push(`/dashboard/analyze?symbol=${symbol}`);
   };
 
   return (
@@ -58,6 +58,11 @@ export function StockSearch() {
             setIsOpen(true);
           }}
           onFocus={() => setIsOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && query.length > 0) {
+              handleSelect(query.toUpperCase());
+            }
+          }}
           placeholder="Search symbol, company, or ISIN..." 
           className="w-full pl-8 pr-4 py-2 bg-transparent text-sm text-gray-900 focus:outline-none placeholder:text-gray-400"
         />
@@ -66,9 +71,9 @@ export function StockSearch() {
       {/* Autocomplete Dropdown */}
       {isOpen && query.length > 0 && (
         <div className="absolute top-full left-0 mt-2 w-full max-h-80 overflow-y-auto bg-white border border-gray-200 shadow-lg rounded-md z-50">
-          {filteredStocks.length > 0 ? (
-            <ul className="py-2">
-              {filteredStocks.map((stock) => (
+          <ul className="py-2">
+            {filteredStocks.length > 0 ? (
+              filteredStocks.map((stock) => (
                 <li 
                   key={stock.symbol}
                   onClick={() => handleSelect(stock.symbol)}
@@ -79,13 +84,22 @@ export function StockSearch() {
                     <div className="text-xs text-gray-500 font-medium">{stock.name}</div>
                   </div>
                 </li>
-              ))}
-            </ul>
-          ) : (
-            <div className="px-4 py-6 text-center text-sm text-gray-500">
-              No results found for "{query}"
-            </div>
-          )}
+              ))
+            ) : null}
+            
+            {/* Always allow searching for the typed query if it's not exactly in the list */}
+            {!filteredStocks.find(s => s.symbol.toLowerCase() === query.toLowerCase()) && (
+              <li 
+                onClick={() => handleSelect(query.toUpperCase())}
+                className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 border-t border-gray-100"
+              >
+                <Search className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-700">
+                  Search for "{query.toUpperCase()}"
+                </span>
+              </li>
+            )}
+          </ul>
         </div>
       )}
     </div>

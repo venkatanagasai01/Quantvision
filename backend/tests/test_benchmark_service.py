@@ -37,7 +37,7 @@ def mock_yfinance_history():
     df = pd.DataFrame(index=dates, data={'Close': prices})
     return df
 
-@patch("yfinance.Ticker")
+@patch("app.services.benchmark.benchmark_service.yf.Ticker")
 def test_outperformance_alpha_beta(mock_ticker, mock_strategy_report, mock_yfinance_history):
     # Setup mock yfinance
     mock_ticker.return_value.history.return_value = mock_yfinance_history
@@ -50,6 +50,7 @@ def test_outperformance_alpha_beta(mock_ticker, mock_strategy_report, mock_yfina
     )
     
     comp = result["comparison_metrics"]
+    print("COMP:", comp)
     
     # 1. Strategy grew at 0.1% daily, benchmark at 0.05% daily. 
     # Excess return should be positive and it should outperform.
@@ -63,7 +64,7 @@ def test_outperformance_alpha_beta(mock_ticker, mock_strategy_report, mock_yfina
     assert "alpha" in comp
     assert "information_ratio" in comp
 
-@patch("yfinance.Ticker")
+@patch("app.services.benchmark.benchmark_service.yf.Ticker")
 def test_missing_benchmark_data(mock_ticker, mock_strategy_report):
     # Simulating a delisted or wrong ticker
     mock_ticker.return_value.history.return_value = pd.DataFrame()

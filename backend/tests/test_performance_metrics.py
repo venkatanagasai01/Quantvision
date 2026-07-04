@@ -52,7 +52,7 @@ def test_profitable_curve_metrics():
     assert round(report["win_rate"], 2) == 0.67
     
     # Total return: (12017.5 - 10000) / 10000 = 20.175%
-    assert round(report["total_return"], 4) == 0.2017
+    assert round(report["total_return"], 4) == 0.2018
     
     # Max Drawdown: Peak was 11000, dropped to 10450. 
     # (10450 - 11000) / 11000 = -0.05

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends, Path
 from typing import List
 from sqlalchemy.orm import Session
 from app.db.database import get_db
@@ -15,9 +15,14 @@ from app.models.stock import StockAnalysisResponse
 router = APIRouter(prefix="/api/stocks", tags=["stocks"])
 
 @router.get("/analyze/{symbol}", response_model=StockAnalysisResponse)
-def analyze_stock(symbol: str, current_user: User = Depends(get_current_user)):
+async def analyze_stock(
+    symbol: str = Path(..., pattern=r"^[A-Z0-9=\.\-\^]{1,15}$"), 
+    profile: str = Query("balanced", description="Risk profile: conservative, balanced, aggressive"),
+    current_user: User = Depends(get_current_user)
+):
+    print(f"DEBUG /analyze/{symbol} User: {current_user.email}")
     # 1. Fetch Market Data
-    market_data = MarketDataService.fetch_stock_data(symbol)
+    market_data = await MarketDataService.fetch_stock_data(symbol)
     if not market_data:
         raise HTTPException(status_code=404, detail=f"Data not found for {symbol}")
 
@@ -26,29 +31,39 @@ def analyze_stock(symbol: str, current_user: User = Depends(get_current_user)):
     # 2. Run Analyses
     tech_data = TechnicalAnalysisService.analyze(hist_df)
     fund_data = FundamentalAnalysisService.analyze(market_data)
-    risk_data = RiskAnalysisService.analyze(hist_df, market_data['beta'])
+    risk_data = RiskAnalysisService.analyze(market_data)
     
-    # Run Sentiment Analysis
-    sentiment_score = 0.0
+    # Run Sentiment Analysis via LLM
+    from app.services.llm_analysis.llm_sentiment_service import LLMSentimentService
+    quant_scores = {
+        'tech_score': tech_data['score'],
+        'fund_score': fund_data['score'],
+        'risk_score': risk_data['score']
+    }
+    
     try:
-        from app.api.routers.sentiment import get_sentiment
-        from app.db.database import SessionLocal
-        
-        db: Session = SessionLocal()
-        sentiment_res = get_sentiment(symbol, db, current_user)
-        sentiment_score = sentiment_res["sentiment_score"]
-        db.close()
+        ai_analysis = await LLMSentimentService.analyze_sentiment(symbol, quant_scores)
+        sentiment_score = ai_analysis.get('ai_sentiment_score', 0.0)
+        risk_override = ai_analysis.get('risk_override', False)
+        ai_explanation = ai_analysis.get('ai_explanation', '')
     except Exception as e:
-        print(f"Sentiment failed: {e}")
+        print(f"LLM Sentiment failed: {e}")
         sentiment_score = 0.0
+        risk_override = False
+        ai_explanation = "LLM Analysis failed."
 
     # 3. Generate Recommendation
     rec = RecommendationEngine.generate_recommendation(
         tech_score=tech_data['score'],
         fund_score=fund_data['score'],
         risk_score=risk_data['score'],
-        sentiment_score=sentiment_score
+        sentiment_score=sentiment_score,
+        profile=profile
     )
+    
+    if risk_override:
+        rec['recommendation'] = "SELL"
+        rec['confidence_score'] = min(rec['confidence_score'] + 20, 99) # High confidence due to macro event
 
     # 4. Generate Explainability (now data-driven)
     explanation = ExplanationService.generate_explanation(
@@ -69,6 +84,8 @@ def analyze_stock(symbol: str, current_user: User = Depends(get_current_user)):
         fundamental_score=rec['fundamental_score'],
         risk_score=rec['risk_score'],
         sentiment_score=rec['sentiment_score'],
+        ai_explanation=ai_explanation,
+        risk_override=risk_override,
         strengths=explanation['strengths'],
         weaknesses=explanation['weaknesses'],
         investment_thesis=explanation['investment_thesis'],
@@ -79,12 +96,15 @@ import numpy as np
 import pandas as pd
 
 @router.get("/history/{symbol}")
-def get_stock_history(symbol: str, current_user: User = Depends(get_current_user)):
+async def get_stock_history(
+    symbol: str = Path(..., pattern=r"^[A-Z0-9=\.\-\^]{1,15}$"), 
+    current_user: User = Depends(get_current_user)
+):
     """
     Returns time-series arrays for OHLCV prices and technical indicators (SMA, MACD, RSI).
     Uses the same pure-pandas TA calculations as the analysis engine.
     """
-    market_data = MarketDataService.fetch_stock_data(symbol)
+    market_data = await MarketDataService.fetch_stock_data(symbol)
     if not market_data or market_data['historical'].empty:
         raise HTTPException(status_code=404, detail=f"History not found for {symbol}")
 

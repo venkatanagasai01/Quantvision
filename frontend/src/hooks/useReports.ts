@@ -1,7 +1,7 @@
 import { fetchWithAuth } from '@/lib/api';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = '/api/backend';
 
 export function useReports(page: number = 1, limit: number = 20, recommendation?: string, search?: string) {
   return useQuery({

@@ -32,6 +32,8 @@ class StockAnalysisResponse(BaseModel):
     fundamental_score: int
     risk_score: int
     sentiment_score: Optional[float] = None
+    ai_explanation: Optional[str] = None
+    risk_override: Optional[bool] = False
     strengths: List[str]
     weaknesses: List[str]
     investment_thesis: str

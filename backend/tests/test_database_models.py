@@ -23,6 +23,7 @@ def test_create_and_cascade_delete_backtest(db_session):
     
     # 1. Create Core
     bt = BacktestRun(
+        user_id=1,
         symbol="AAPL",
         start_date="2024-01-01",
         end_date="2024-06-01",
@@ -82,7 +83,7 @@ def test_persistence_service_save_complete(db_session):
     }
     
     saved = PersistenceService.save_complete_backtest(
-        db=db_session, symbol="TSLA", start_date="2024-01-01", end_date="2024-06-01",
+        db=db_session, user_id=1, symbol="TSLA", start_date="2024-01-01", end_date="2024-06-01",
         portfolio_result=portfolio, performance_result=performance, benchmark_result=benchmark
     )
     

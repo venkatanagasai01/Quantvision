@@ -20,7 +20,7 @@ class TradeRequest(BaseModel):
     shares: float
 
 @router.get("/portfolio")
-def get_portfolio(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def get_portfolio(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     portfolio = PortfolioService.get_or_create_portfolio(db, current_user)
     
     # Calculate current portfolio value based on live prices
@@ -29,7 +29,7 @@ def get_portfolio(current_user: User = Depends(get_current_user), db: Session = 
     
     for pos in positions:
         if pos.shares > 0:
-            md = MarketDataService.fetch_stock_data(pos.symbol)
+            md = await MarketDataService.fetch_stock_data(pos.symbol)
             current_price = md.get("current_price", pos.average_cost) if md else pos.average_cost
             holdings_value += current_price * pos.shares
             
@@ -50,14 +50,14 @@ def get_portfolio(current_user: User = Depends(get_current_user), db: Session = 
     }
 
 @router.get("/positions")
-def get_positions(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def get_positions(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     portfolio = PortfolioService.get_or_create_portfolio(db, current_user)
     positions = PositionService.get_positions(db, portfolio.id)
     
     res = []
     for pos in positions:
         if pos.shares > 0:
-            md = MarketDataService.fetch_stock_data(pos.symbol)
+            md = await MarketDataService.fetch_stock_data(pos.symbol)
             current_price = md.get("current_price", pos.average_cost) if md else pos.average_cost
             market_value = current_price * pos.shares
             cost_basis = pos.average_cost * pos.shares
@@ -90,10 +90,10 @@ def get_trades(current_user: User = Depends(get_current_user), db: Session = Dep
     return sorted(trades, key=lambda t: t.executed_at, reverse=True)
 
 @router.post("/buy")
-def execute_buy(request: TradeRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def execute_buy(request: TradeRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     portfolio = PortfolioService.get_or_create_portfolio(db, current_user)
     try:
-        trade = ExecutionService.execute_market_order(db, portfolio, request.symbol, "BUY", request.shares)
+        trade = await ExecutionService.execute_market_order(db, portfolio, request.symbol, "BUY", request.shares)
         return {"message": "Trade executed successfully", "trade_id": trade.id, "execution_price": trade.execution_price, "total_amount": trade.total_amount}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -101,10 +101,10 @@ def execute_buy(request: TradeRequest, current_user: User = Depends(get_current_
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/sell")
-def execute_sell(request: TradeRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def execute_sell(request: TradeRequest, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     portfolio = PortfolioService.get_or_create_portfolio(db, current_user)
     try:
-        trade = ExecutionService.execute_market_order(db, portfolio, request.symbol, "SELL", request.shares)
+        trade = await ExecutionService.execute_market_order(db, portfolio, request.symbol, "SELL", request.shares)
         return {"message": "Trade executed successfully", "trade_id": trade.id, "execution_price": trade.execution_price, "total_amount": trade.total_amount}
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

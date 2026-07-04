@@ -2,23 +2,41 @@ from typing import Dict, Any
 
 class RecommendationEngine:
     """
-    Weighted Scoring Engine to generate BUY, HOLD, or SELL recommendations.
+    Weighted Scoring Engine to generate BUY, HOLD, or SELL recommendations
+    based on risk profiles.
     """
+    
+    PROFILES = {
+        "conservative": {"tech": 0.20, "fund": 0.45, "risk": 0.25, "sent": 0.10},
+        "balanced":     {"tech": 0.35, "fund": 0.35, "risk": 0.15, "sent": 0.15},
+        "aggressive":   {"tech": 0.45, "fund": 0.20, "risk": 0.05, "sent": 0.30},
+    }
 
-    @staticmethod
-    def generate_recommendation(tech_score: int, fund_score: int, risk_score: int, sentiment_score: float = 0.0) -> Dict[str, Any]:
+    @classmethod
+    def generate_recommendation(
+        cls, 
+        tech_score: int, 
+        fund_score: int, 
+        risk_score: int, 
+        sentiment_score: float = 0.0,
+        profile: str = "balanced"
+    ) -> Dict[str, Any]:
         """
-        Weights:
-        - Technical: 35%
-        - Fundamental: 35%
-        - Risk: 15%
-        - Sentiment: 15% (Scale is -100 to 100, map it to 0-100 for global logic)
+        Generates recommendation based on dynamic weights.
         """
+        # Ensure profile exists, fallback to balanced
+        weights = cls.PROFILES.get(profile.lower(), cls.PROFILES["balanced"])
+        
         # Map sentiment [-100, 100] -> [0, 100]
         mapped_sentiment = (sentiment_score + 100) / 2
         
         # Calculate Final Score
-        final_score = (tech_score * 0.35) + (fund_score * 0.35) + (risk_score * 0.15) + (mapped_sentiment * 0.15)
+        final_score = (
+            (tech_score * weights["tech"]) + 
+            (fund_score * weights["fund"]) + 
+            (risk_score * weights["risk"]) + 
+            (mapped_sentiment * weights["sent"])
+        )
         final_score = round(final_score)
 
         # Recommendation Logic
@@ -35,5 +53,6 @@ class RecommendationEngine:
             "technical_score": tech_score,
             "fundamental_score": fund_score,
             "risk_score": risk_score,
-            "sentiment_score": round(sentiment_score, 2)
+            "sentiment_score": round(sentiment_score, 2),
+            "profile_used": profile.lower()
         }

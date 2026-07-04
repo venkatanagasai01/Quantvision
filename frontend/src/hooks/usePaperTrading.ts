@@ -7,7 +7,7 @@ export function usePortfolio() {
   return useQuery({
     queryKey: ["portfolio"],
     queryFn: async () => {
-      const res = await api.get("/api/paper-trading/portfolio");
+      const res = await api.get("/paper-trading/portfolio");
       return res.data;
     }
   });
@@ -17,7 +17,7 @@ export function usePositions() {
   return useQuery({
     queryKey: ["positions"],
     queryFn: async () => {
-      const res = await api.get("/api/paper-trading/positions");
+      const res = await api.get("/paper-trading/positions");
       return res.data;
     }
   });
@@ -27,7 +27,7 @@ export function useOrders() {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const res = await api.get("/api/paper-trading/orders");
+      const res = await api.get("/paper-trading/orders");
       return res.data;
     }
   });
@@ -37,7 +37,7 @@ export function useTrades() {
   return useQuery({
     queryKey: ["trades"],
     queryFn: async () => {
-      const res = await api.get("/api/paper-trading/trades");
+      const res = await api.get("/paper-trading/trades");
       return res.data;
     }
   });
@@ -47,7 +47,7 @@ export function usePerformance() {
   return useQuery({
     queryKey: ["performance"],
     queryFn: async () => {
-      const res = await api.get("/api/paper-trading/performance");
+      const res = await api.get("/paper-trading/performance");
       return res.data;
     }
   });
@@ -58,12 +58,11 @@ export function useExecuteTrade() {
 
   return useMutation({
     mutationFn: async ({ symbol, shares, action }: { symbol: string; shares: number; action: "BUY" | "SELL" }) => {
-      const endpoint = action === "BUY" ? "/api/paper-trading/buy" : "/api/paper-trading/sell";
+      const endpoint = action === "BUY" ? "/paper-trading/buy" : "/paper-trading/sell";
       const response = await api.post(endpoint, { symbol, shares });
       return response.data;
     },
     onSuccess: () => {
-      // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: ["portfolio"] });
       queryClient.invalidateQueries({ queryKey: ["positions"] });
       queryClient.invalidateQueries({ queryKey: ["orders"] });

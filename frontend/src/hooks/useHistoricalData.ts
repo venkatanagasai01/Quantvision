@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "@/lib/api";
+import { fetchWithAuth } from "@/lib/api";
+
+const API_BASE = '/api/backend';
 
 export interface HistoricalDataResponse {
   symbol: string;
@@ -15,14 +17,25 @@ export interface HistoricalDataResponse {
   };
 }
 
-export function useHistoricalData(symbol: string) {
+export function useHistoricalData(symbol: string, token?: string) {
   return useQuery<HistoricalDataResponse>({
     queryKey: ["history", symbol],
     queryFn: async () => {
-      const res = await api.get(`/api/stocks/history/${symbol}`);
-      return res.data;
+      if (!token) throw new Error("No auth token available");
+      const headers = new Headers();
+      headers.set('Authorization', `Bearer ${token}`);
+      const res = await fetch(`${API_BASE}/stocks/history/${symbol}`, { headers });
+      if (res.status === 401) {
+        if (typeof window !== 'undefined') {
+          const { signOut } = await import("next-auth/react");
+          await signOut({ callbackUrl: "/login" });
+        }
+        throw new Error("Session expired. Logging out...");
+      }
+      if (!res.ok) throw new Error("Failed to fetch history");
+      return res.json();
     },
-    enabled: !!symbol,
-    staleTime: 1000 * 60 * 5, // 5 mins
+    enabled: !!symbol && !!token,
+    staleTime: 1000 * 60 * 5,
   });
 }

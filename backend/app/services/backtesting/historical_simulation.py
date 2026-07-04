@@ -78,7 +78,10 @@ class HistoricalSimulationEngine:
                 # 2. Run Analyses on truncated data
                 tech_data = TechnicalAnalysisService.analyze(truncated_df)
                 fund_data = FundamentalAnalysisService.analyze(mock_fundamental_data)
-                risk_data = RiskAnalysisService.analyze(truncated_df, mock_fundamental_data['beta'])
+                risk_data = RiskAnalysisService.analyze({
+                    'historical': truncated_df,
+                    'beta': mock_fundamental_data['beta']
+                })
                 
                 # 3. Generate Recommendation
                 rec = RecommendationEngine.generate_recommendation(

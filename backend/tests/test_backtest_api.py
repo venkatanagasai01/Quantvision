@@ -5,7 +5,7 @@ import pytest
 from app.main import app
 from app.db.database import Base, get_db
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test_backtest_api.db"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -17,14 +17,22 @@ def override_get_db():
     finally:
         db.close()
 
-app.dependency_overrides[get_db] = override_get_db
+from app.core.security import get_current_user
+from app.models.db_models import User
+
+def override_get_current_user():
+    return User(id=1, email="test@example.com")
+
 client = TestClient(app)
 
 @pytest.fixture(scope="module", autouse=True)
 def create_test_database():
+    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_current_user] = override_get_current_user
     Base.metadata.create_all(bind=engine)
     yield
     Base.metadata.drop_all(bind=engine)
+    app.dependency_overrides = {}
 
 # We mock the entire internal quantitative simulation process so we don't hit 
 # the actual internet/yfinance during the API router tests.
