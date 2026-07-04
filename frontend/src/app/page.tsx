@@ -1,157 +1,245 @@
 "use client";
 
 import Link from "next/link";
-import { TrendingUp, ArrowRight, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  TrendingUp, Brain, BarChart3, ShieldCheck, ArrowRight, Activity, Target, ShieldAlert
+} from "lucide-react";
+
+const TYPING_PHRASES = [
+  "Institutional Analysis.",
+  "Quantitative Backtesting.",
+  "Paper Trading Portfolio.",
+  "Real-Time Sentiment.",
+];
 
 export default function LandingPage() {
-  const [scrolled, setScrolled] = useState(false);
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
+  // Typing effect
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const phrase = TYPING_PHRASES[phraseIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && displayed.length < phrase.length) {
+      timeout = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length + 1)), 70);
+    } else if (!isDeleting && displayed.length === phrase.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 2500);
+    } else if (isDeleting && displayed.length > 0) {
+      timeout = setTimeout(() => setDisplayed(phrase.slice(0, displayed.length - 1)), 40);
+    } else if (isDeleting && displayed.length === 0) {
+      setIsDeleting(false);
+      setPhraseIndex((i) => (i + 1) % TYPING_PHRASES.length);
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, phraseIndex]);
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans overflow-x-hidden selection:bg-white/30 selection:text-white">
+    <div className="min-h-screen bg-[#080B12] text-white font-sans selection:bg-indigo-500/30">
 
-      {/* ── Top Nav ─────────────────────────────────────────── */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-black/70 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent py-6"}`}>
-        <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+      {/* ── Navigation ──────────────────────────────────────── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#080B12]/80 backdrop-blur-md border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
-              <TrendingUp className="w-4 h-4 text-black" strokeWidth={2.5} />
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+              <TrendingUp className="w-4 h-4 text-white" strokeWidth={2.5} />
             </div>
-            <span className="font-semibold text-lg tracking-tight">QuantVision</span>
+            <span className="font-bold text-lg tracking-tight">QuantVision</span>
           </div>
-          <div className="flex items-center gap-6">
-            <Link href="/login" className="text-sm font-medium text-slate-400 hover:text-white transition-colors">
+          <div className="flex items-center gap-4">
+            <Link href="/login" className="text-sm font-semibold text-slate-300 hover:text-white transition-colors">
               Log in
             </Link>
-            <Link href="/register" className="text-sm font-medium bg-white text-black hover:bg-slate-200 px-5 py-2.5 rounded-full transition-all">
+            <Link href="/register" className="text-sm font-bold bg-white text-black hover:bg-slate-200 px-5 py-2 rounded-lg transition-all">
               Sign up
             </Link>
           </div>
         </div>
       </nav>
 
-      {/* ── Hero Section ──────────────────────────────────── */}
-      <section className="relative pt-40 pb-20 sm:pt-48 sm:pb-32 flex flex-col items-center justify-center text-center px-6">
-        
-        {/* Subtle background glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
+      {/* ── Hero Section ────────────────────────────────────── */}
+      <section className="relative pt-32 pb-20 overflow-hidden">
+        {/* Glows */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-600/15 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 text-slate-400 text-xs font-medium mb-8 animate-fade-up">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          QuantVision Terminal v2.0 is live
-        </div>
-
-        <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-[110px] font-medium tracking-tighter mb-8 animate-fade-up delay-100 leading-[0.95] max-w-5xl">
-          Trade with <br className="hidden sm:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40">
-            unfair intelligence.
-          </span>
-        </h1>
-
-        <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-12 animate-fade-up delay-200 leading-relaxed font-normal">
-          Institutional-grade AI analysis, backtesting, and paper trading. <br className="hidden sm:block" /> Beautifully designed for the modern retail trader.
-        </p>
-
-        <div className="flex items-center gap-4 animate-fade-up delay-300">
-          <Link
-            href="/register"
-            className="flex items-center gap-2 bg-white text-black font-medium px-8 py-4 rounded-full text-lg transition-transform hover:scale-105"
-          >
-            Get Started <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* ── Massive Hero Image ────────────────────────────── */}
-      <section className="relative px-6 pb-40 flex justify-center animate-fade-up delay-500">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black to-black z-10 pointer-events-none opacity-40" />
-        <div className="relative max-w-[1400px] w-full rounded-2xl md:rounded-[40px] overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(255,255,255,0.05)]">
-          <img 
-            src="/assets/hero-dashboard.png" 
-            alt="QuantVision Terminal" 
-            className="w-full h-auto object-cover"
-          />
-        </div>
-      </section>
-
-      {/* ── Feature 1: Analysis ───────────────────────────── */}
-      <section className="py-32 px-6 border-t border-white/5 relative">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+        <div className="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
           
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium tracking-tight mb-6 max-w-4xl leading-tight">
-            An AI analyst that never sleeps.
-          </h2>
-          <p className="text-xl text-slate-400 max-w-2xl mb-16">
-            We process millions of data points across technicals, fundamentals, and real-time news to give you a single, actionable confidence score.
-          </p>
+          <div className="text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-bold mb-6">
+              <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
+              The all-in-one terminal
+            </div>
 
-          <div className="relative w-full max-w-5xl rounded-2xl md:rounded-[40px] overflow-hidden border border-white/10 shadow-2xl group">
-             {/* Subtle colored glow behind image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-emerald-500/20 blur-[100px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <img 
-              src="/assets/analysis-feature.png" 
-              alt="AI Score Analysis" 
-              className="relative z-10 w-full h-auto object-cover"
-            />
+            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight mb-6 leading-[1.1]">
+              Level up your trading with <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400">
+                {displayed}
+                <span className="animate-pulse text-indigo-400">|</span>
+              </span>
+            </h1>
+
+            <p className="text-lg text-slate-400 mb-8 max-w-lg leading-relaxed">
+              Stop guessing. QuantVision aggregates deep technical indicators, fundamental ratios, and real-time FinBERT sentiment into one actionable thesis.
+            </p>
+
+            <div className="flex flex-wrap items-center gap-4">
+              <Link
+                href="/register"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-8 py-3.5 rounded-xl transition-all shadow-[0_0_20px_rgba(79,70,229,0.3)] flex items-center gap-2"
+              >
+                Start Trading <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
 
+          {/* Mini CSS UI Preview - Dashboard */}
+          <div className="relative w-full h-[400px] rounded-2xl border border-white/10 bg-[#0B0F19] shadow-2xl p-6 overflow-hidden hidden md:block group perspective-1000">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none" />
+            
+            {/* Mock Header */}
+            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-slate-800 animate-pulse" />
+                <div className="space-y-2">
+                  <div className="w-24 h-4 rounded bg-slate-800 animate-pulse" />
+                  <div className="w-16 h-3 rounded bg-slate-800 animate-pulse" />
+                </div>
+              </div>
+              <div className="w-20 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 text-emerald-400 font-bold text-xs">
+                BUY
+              </div>
+            </div>
+
+            {/* Mock Chart Area */}
+            <div className="space-y-4">
+              <div className="flex items-end gap-2 h-32 border-b border-slate-800 pb-2">
+                {[40, 60, 45, 80, 55, 90, 75, 100, 85].map((h, i) => (
+                  <div key={i} className="flex-1 bg-gradient-to-t from-indigo-600 to-indigo-400 rounded-t-sm" style={{ height: `${h}%` }} />
+                ))}
+              </div>
+            </div>
+
+            {/* Mock Data Row */}
+            <div className="grid grid-cols-3 gap-4 mt-6">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="h-16 rounded-xl bg-slate-800/50 border border-slate-700/50" />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Feature 2: Paper Trading ───────────────────────── */}
-      <section className="py-32 px-6 border-t border-white/5 relative">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
+      {/* ── Feature: 4-Factor AI Model ──────────────────────── */}
+      <section className="py-24 border-t border-white/5 bg-white/[0.02]">
+        <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           
-          <h2 className="text-4xl sm:text-5xl md:text-7xl font-medium tracking-tight mb-6 max-w-4xl leading-tight">
-            Test your edge. <br/> Zero risk.
-          </h2>
-          <p className="text-xl text-slate-400 max-w-2xl mb-16">
-            Start with virtual capital. Execute trades using live market prices. Track your true performance before putting real money on the line.
-          </p>
-
-          <div className="relative w-full max-w-5xl rounded-2xl md:rounded-[40px] overflow-hidden border border-white/10 shadow-2xl group">
-             {/* Subtle colored glow behind image */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-indigo-500/20 blur-[100px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <img 
-              src="/assets/paper-trading.png" 
-              alt="Paper Trading" 
-              className="relative z-10 w-full h-auto object-cover"
-            />
+          {/* CSS UI Preview - Score Ring */}
+          <div className="order-2 md:order-1 flex justify-center">
+            <div className="relative w-72 h-72 rounded-full bg-[#0B0F19] border border-white/10 shadow-2xl flex items-center justify-center flex-col shadow-emerald-500/10 group">
+              <svg className="absolute inset-0 w-full h-full -rotate-90">
+                <circle cx="144" cy="144" r="130" stroke="rgba(255,255,255,0.05)" strokeWidth="12" fill="none" />
+                <circle cx="144" cy="144" r="130" stroke="#10b981" strokeWidth="12" fill="none" strokeDasharray="816" strokeDashoffset="200" strokeLinecap="round" className="drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-all duration-1000 group-hover:strokeDashoffset-[100]" />
+              </svg>
+              <span className="text-5xl font-black text-white">85</span>
+              <span className="text-sm font-bold text-emerald-400 mt-1 uppercase tracking-widest">Bullish</span>
+            </div>
           </div>
 
+          <div className="order-1 md:order-2">
+            <div className="inline-flex items-center gap-2 text-emerald-400 font-bold mb-3 text-sm tracking-widest uppercase">
+              <Brain className="w-4 h-4" /> The Brain
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6">4-Factor Intelligence.</h2>
+            <p className="text-slate-400 leading-relaxed mb-6">
+              We don't just look at a price chart. Our proprietary model analyzes four distinct pillars for every stock on the market:
+            </p>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                <div>
+                  <strong className="text-slate-200 block">Technical Momentum</strong>
+                  <span className="text-sm text-slate-500">RSI, MACD, and Bollinger Bands analyzed across timeframes.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                <div>
+                  <strong className="text-slate-200 block">Fundamental Ratios</strong>
+                  <span className="text-sm text-slate-500">P/E, ROE, and Debt-to-Equity scored against sector medians.</span>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0" />
+                <div>
+                  <strong className="text-slate-200 block">FinBERT Sentiment</strong>
+                  <span className="text-sm text-slate-500">Real-time NLP scanning of news articles and market chatter.</span>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
-      {/* ── Bottom CTA ──────────────────────────────────────── */}
-      <section className="py-40 px-6 border-t border-white/5 relative flex flex-col items-center justify-center text-center">
-        <h2 className="text-5xl sm:text-7xl font-medium tracking-tight mb-8">
-          Ready to begin?
-        </h2>
+      {/* ── Feature Grid (The "Matter") ─────────────────────── */}
+      <section className="py-24 border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold mb-4">Everything you need to win.</h2>
+            <p className="text-slate-400 max-w-xl mx-auto">
+              Professional tools that institutional traders pay thousands for, simplified into a single beautiful dashboard.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: ShieldCheck,
+                title: "Paper Trading",
+                desc: "Simulate trades with ₹10,00,000 in virtual capital. Execute orders with zero risk and build your track record.",
+                color: "text-indigo-400",
+                bg: "bg-indigo-500/10 border-indigo-500/20"
+              },
+              {
+                icon: BarChart3,
+                title: "Quantitative Backtesting",
+                desc: "Test strategies on historical data. Measure your CAGR, Max Drawdown, and Sharpe Ratio instantly.",
+                color: "text-emerald-400",
+                bg: "bg-emerald-500/10 border-emerald-500/20"
+              },
+              {
+                icon: Target,
+                title: "Research Reports",
+                desc: "Generate beautiful, PDF-ready institutional research reports with a single click.",
+                color: "text-amber-400",
+                bg: "bg-amber-500/10 border-amber-500/20"
+              }
+            ].map((f, i) => (
+              <div key={i} className="bg-[#0B0F19] border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-colors">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-4 border ${f.bg}`}>
+                  <f.icon className={`w-5 h-5 ${f.color}`} />
+                </div>
+                <h3 className="text-lg font-bold mb-2">{f.title}</h3>
+                <p className="text-sm text-slate-400 leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ─────────────────────────────────────────────── */}
+      <section className="py-24 text-center px-6">
+        <h2 className="text-4xl font-bold mb-6">Ready to trade smarter?</h2>
         <Link
           href="/register"
-          className="flex items-center gap-2 bg-white text-black font-medium px-10 py-5 rounded-full text-xl transition-transform hover:scale-105"
+          className="inline-block bg-white text-black font-bold px-8 py-3.5 rounded-full hover:bg-slate-200 transition-colors"
         >
-          Create Free Account <ChevronRight className="w-5 h-5" />
+          Create Free Account
         </Link>
+        <p className="mt-4 text-sm text-slate-500">No credit card required. Start analyzing instantly.</p>
       </section>
 
-      {/* ── Footer ──────────────────────────────────────────── */}
-      <footer className="border-t border-white/10 py-12 text-center bg-black">
-        <div className="flex flex-col items-center justify-center gap-6">
-          <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
-            <TrendingUp className="w-3 h-3 text-black" strokeWidth={3} />
-          </div>
-          <p className="text-slate-500 text-sm font-medium">© {new Date().getFullYear()} QuantVision. Designed for the obsessed.</p>
-        </div>
-      </footer>
     </div>
   );
 }
