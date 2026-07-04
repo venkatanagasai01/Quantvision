@@ -1,6 +1,6 @@
 "use client";
 
-import { Bell, LogOut, ChevronDown } from "lucide-react";
+import { Bell, LogOut, ChevronDown, HelpCircle, User } from "lucide-react";
 import { StockSearch } from "@/components/ui/StockSearch";
 import { useSession, signOut } from "next-auth/react";
 import { useState } from "react";
@@ -9,57 +9,102 @@ export function TopNavbar() {
   const { data: session } = useSession();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const userInitial = session?.user?.name?.[0]?.toUpperCase() || "Q";
+  const userName = session?.user?.name || "Analyst";
+  const userEmail = session?.user?.email || "";
+
   return (
-    <header className="h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-10">
-      
-      {/* Search Bar */}
+    <header className="h-20 bg-white/90 backdrop-blur-lg border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-20 shadow-sm">
+
+      {/* Search */}
       <div className="flex-1 max-w-lg">
         <StockSearch />
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-8 ml-4">
-        
+      <div className="flex items-center gap-6 ml-4">
+
+        {/* Help */}
+        <div className="tooltip-container">
+          <button className="relative text-slate-400 hover:text-slate-700 transition-colors p-2 rounded-lg hover:bg-slate-50">
+            <HelpCircle className="w-5 h-5" strokeWidth={1.5} />
+          </button>
+          <div className="tooltip-box w-48">
+            Hover any metric or section header inside the app for contextual explanations.
+          </div>
+        </div>
+
         {/* Notifications */}
-        <button className="relative text-gray-400 hover:text-gray-900 transition-colors">
-          <Bell className="w-5 h-5" strokeWidth={1.5} />
-          <span className="absolute 1 top-0 right-0 w-1.5 h-1.5 bg-blue-600 rounded-full"></span>
-        </button>
+        <div className="tooltip-container">
+          <button className="relative text-slate-400 hover:text-slate-700 transition-colors p-2 rounded-lg hover:bg-slate-50">
+            <Bell className="w-5 h-5" strokeWidth={1.5} />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-white" />
+          </button>
+          <div className="tooltip-box w-44">View system alerts and AI notifications.</div>
+        </div>
+
+        {/* Divider */}
+        <div className="h-8 w-px bg-slate-100" />
 
         {/* User Profile */}
         <div className="relative">
-          <div 
-            className="flex items-center gap-3 cursor-pointer"
+          <button
+            className="flex items-center gap-3 cursor-pointer hover:bg-slate-50 px-2 py-1.5 rounded-xl transition-all"
             onClick={() => setShowDropdown(!showDropdown)}
           >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xs text-white shadow-sm">
+              {userInitial}
+            </div>
             <div className="text-right hidden sm:block">
-              <div className="text-xs font-semibold text-gray-900">{session?.user?.name || "Analyst"}</div>
-              <div className="text-[10px] text-gray-500 uppercase tracking-wide">Institutional</div>
+              <div className="text-xs font-bold text-slate-900 leading-none">{userName}</div>
+              <div className="text-[10px] text-slate-400 uppercase tracking-wider mt-0.5">Terminal User</div>
             </div>
-            <div className="w-8 h-8 rounded bg-gray-100 border border-gray-200 flex items-center justify-center font-semibold text-xs text-gray-600">
-              {session?.user?.name?.[0]?.toUpperCase() || "Q"}
-            </div>
-            <ChevronDown className="w-4 h-4 text-gray-400" />
-          </div>
+            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showDropdown ? "rotate-180" : ""}`} />
+          </button>
 
           {/* Dropdown */}
           {showDropdown && (
-            <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 animate-in fade-in slide-in-from-top-2">
-              <div className="px-4 py-2 border-b border-gray-100">
-                <p className="text-sm font-medium text-gray-900 truncate">{session?.user?.name}</p>
-                <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+            <>
+              {/* Backdrop */}
+              <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
+
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-xl py-2 z-50">
+                {/* User info */}
+                <div className="px-4 py-3 border-b border-slate-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm text-white">
+                      {userInitial}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 truncate">{userName}</p>
+                      <p className="text-xs text-slate-400 truncate">{userEmail}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Menu items */}
+                <div className="py-1">
+                  <a
+                    href="/dashboard/settings"
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                    onClick={() => setShowDropdown(false)}
+                  >
+                    <User className="w-4 h-4 text-slate-400" />
+                    Account Settings
+                  </a>
+                  <div className="border-t border-slate-100 my-1" />
+                  <button
+                    onClick={() => signOut({ callbackUrl: "/login" })}
+                    className="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sign Out
+                  </button>
+                </div>
               </div>
-              <button 
-                onClick={() => signOut({ callbackUrl: "/login" })}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
-            </div>
+            </>
           )}
         </div>
-
       </div>
     </header>
   );
