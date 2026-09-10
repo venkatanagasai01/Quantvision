@@ -14,12 +14,12 @@ function useChartContainer(data: any, builder: (chart: any) => void, deps: any[]
     const chart = createChart(containerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#64748b",
+        textColor: "#94a3b8",
         fontFamily: "'Inter', sans-serif",
       },
       grid: {
-        vertLines: { color: "#f8fafc" },
-        horzLines: { color: "#f1f5f9" },
+        vertLines: { color: "rgba(255, 255, 255, 0.05)" },
+        horzLines: { color: "rgba(255, 255, 255, 0.05)" },
       },
       width: containerRef.current.clientWidth,
       height: 200,
@@ -28,8 +28,8 @@ function useChartContainer(data: any, builder: (chart: any) => void, deps: any[]
         vertLine: { color: "#94a3b8", style: 3, labelBackgroundColor: "#1e293b" },
         horzLine: { color: "#94a3b8", style: 3, labelBackgroundColor: "#1e293b" },
       },
-      timeScale: { borderColor: "#e2e8f0", timeVisible: true, secondsVisible: false },
-      rightPriceScale: { borderColor: "#e2e8f0" },
+      timeScale: { borderColor: "rgba(255, 255, 255, 0.1)", timeVisible: true, secondsVisible: false },
+      rightPriceScale: { borderColor: "rgba(255, 255, 255, 0.1)" },
     });
 
     builder(chart);
@@ -89,7 +89,7 @@ function RSIChart({ data }: { data: any[] }) {
 
     // Neutral 50 line
     chart.addSeries(LineSeries, {
-      color: "#cbd5e1",
+      color: "#475569",
       lineWidth: 1,
       lineStyle: 2,
       title: "Neutral (50)",
@@ -105,10 +105,10 @@ function RSIChart({ data }: { data: any[] }) {
         <span className="flex items-center gap-1.5 text-red-500">
           <span className="w-4 h-0.5 bg-red-400 inline-block border-dashed" /> Above 70 = Overbought (potential SELL signal)
         </span>
-        <span className="flex items-center gap-1.5 text-emerald-600">
+        <span className="flex items-center gap-1.5 text-emerald-400">
           <span className="w-4 h-0.5 bg-emerald-400 inline-block" /> Below 30 = Oversold (potential BUY signal)
         </span>
-        <span className="flex items-center gap-1.5 text-violet-600">
+        <span className="flex items-center gap-1.5 text-violet-400">
           <span className="w-4 h-0.5 bg-violet-400 inline-block" /> RSI line
         </span>
       </div>
@@ -116,9 +116,9 @@ function RSIChart({ data }: { data: any[] }) {
       {/* RSI zones explanation */}
       <div className="mt-3 grid grid-cols-3 gap-2 text-center">
         {[
-          { range: "0 – 30", label: "Oversold Zone", desc: "Stock may be undervalued. Look for BUY opportunities.", color: "bg-emerald-50 border-emerald-100 text-emerald-700" },
-          { range: "30 – 70", label: "Neutral Zone", desc: "Normal momentum. No extreme reading.", color: "bg-slate-50 border-slate-100 text-slate-600" },
-          { range: "70 – 100", label: "Overbought Zone", desc: "Stock may be overvalued. Look for SELL signals.", color: "bg-red-50 border-red-100 text-red-700" },
+          { range: "0 – 30", label: "Oversold Zone", desc: "Stock may be undervalued. Look for BUY opportunities.", color: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" },
+          { range: "30 – 70", label: "Neutral Zone", desc: "Normal momentum. No extreme reading.", color: "bg-white/5 border-white/10 text-slate-300" },
+          { range: "70 – 100", label: "Overbought Zone", desc: "Stock may be overvalued. Look for SELL signals.", color: "bg-red-500/10 border-red-500/20 text-red-400" },
         ].map((z, i) => (
           <div key={i} className={`text-xs rounded-lg border px-2 py-1.5 ${z.color}`}>
             <div className="font-black text-[11px]">{z.range}</div>
@@ -181,7 +181,7 @@ function MACDChart({ data }: { data: any }) {
     const base = data.macd || data.signal || data.histogram || [];
     if (base.length) {
       chart.addSeries(LineSeries, {
-        color: "#cbd5e1",
+        color: "#475569",
         lineWidth: 1,
         lineStyle: 2,
         title: "Zero",
@@ -195,24 +195,24 @@ function MACDChart({ data }: { data: any }) {
     <div>
       {/* MACD legend */}
       <div className="flex items-center gap-4 mb-3 flex-wrap text-xs font-semibold">
-        <span className="flex items-center gap-1.5 text-blue-600">
+        <span className="flex items-center gap-1.5 text-blue-400">
           <span className="w-4 h-0.5 bg-blue-500 inline-block" /> MACD Line
         </span>
-        <span className="flex items-center gap-1.5 text-orange-500">
+        <span className="flex items-center gap-1.5 text-orange-400">
           <span className="w-4 h-0.5 bg-orange-400 inline-block" /> Signal Line
         </span>
-        <span className="flex items-center gap-1.5 text-slate-500">
+        <span className="flex items-center gap-1.5 text-slate-400">
           <span className="w-4 h-2 bg-emerald-400/60 inline-block rounded" /> Histogram (Green=Bullish, Red=Bearish)
         </span>
       </div>
       <div ref={containerRef} className="w-full h-[200px]" />
       {/* MACD reading guide */}
       <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2 text-blue-700">
+        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2 text-blue-400">
           <div className="font-black mb-0.5">MACD crosses above Signal →</div>
           <div>Bullish momentum. Possible BUY setup.</div>
         </div>
-        <div className="bg-red-50 border border-red-100 rounded-lg px-3 py-2 text-red-700">
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-red-400">
           <div className="font-black mb-0.5">MACD crosses below Signal →</div>
           <div>Bearish momentum. Possible SELL setup.</div>
         </div>
@@ -227,19 +227,19 @@ const TABS = [
     id: "Volume",
     icon: BarChart3,
     desc: "Daily trading volume. Surging volume confirms a price move; falling volume suggests it may reverse.",
-    color: "text-sky-600",
+    color: "text-sky-400",
   },
   {
     id: "RSI",
     icon: Activity,
     desc: "Relative Strength Index (14-day). Measures momentum. Above 70 = overbought. Below 30 = oversold.",
-    color: "text-violet-600",
+    color: "text-violet-400",
   },
   {
     id: "MACD",
     icon: TrendingUp,
     desc: "Moving Average Convergence Divergence. Shows trend direction and momentum. Blue line crossing orange = signal change.",
-    color: "text-blue-600",
+    color: "text-blue-400",
   },
 ];
 
@@ -248,20 +248,20 @@ export function IndicatorTabs({ volume, rsi, macd }: any) {
   const active = TABS.find(t => t.id === activeTab)!;
 
   return (
-    <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm overflow-hidden">
       {/* Tab bar */}
-      <div className="flex items-center gap-0 border-b border-slate-100 bg-slate-50/50">
+      <div className="flex items-center gap-0 border-b border-white/5 bg-white/5">
         {TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-5 py-4 text-sm font-bold border-b-2 transition-all ${
               activeTab === tab.id
-                ? `text-indigo-700 border-indigo-600 bg-white`
-                : "text-slate-400 border-transparent hover:text-slate-700 hover:bg-white/60"
+                ? `text-indigo-400 border-indigo-500 bg-[#0B1120]`
+                : "text-slate-400 border-transparent hover:text-slate-200 hover:bg-white/5"
             }`}
           >
-            <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-indigo-500" : "text-slate-300"}`} />
+            <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? "text-indigo-400" : "text-slate-500"}`} />
             {tab.id}
           </button>
         ))}
@@ -275,7 +275,7 @@ export function IndicatorTabs({ volume, rsi, macd }: any) {
       </div>
 
       {/* Active tab description */}
-      <div className="px-5 py-3 bg-slate-50/30 border-b border-slate-100">
+      <div className="px-5 py-3 bg-white/5 border-b border-white/5">
         <p className={`text-xs font-semibold ${active.color} flex items-center gap-1.5`}>
           <active.icon className="w-3.5 h-3.5" />
           {active.desc}

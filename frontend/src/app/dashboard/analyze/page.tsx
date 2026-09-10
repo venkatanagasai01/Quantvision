@@ -27,12 +27,12 @@ import { Suspense } from "react";
 
 // ─── Feature preview cards ────────────────────────────────────
 const WHAT_YOU_GET = [
-  { icon: Brain,       title: "4-Factor AI Score",       desc: "Technical + Fundamental + Sentiment + Risk scored 0–100.", color: "text-indigo-500", bg: "bg-indigo-50 border-indigo-100" },
-  { icon: TrendingUp,  title: "Price Chart + Signals",   desc: "Candlestick chart with SMA-50/200 and BUY/SELL markers.", color: "text-emerald-500", bg: "bg-emerald-50 border-emerald-100" },
-  { icon: BarChart3,   title: "RSI, MACD & Volume",      desc: "Technical indicator panels with overbought/oversold zones.", color: "text-violet-500", bg: "bg-violet-50 border-violet-100" },
-  { icon: ShieldCheck, title: "Bull / Bear Case",        desc: "Numbered AI-generated reasons for and against investing.", color: "text-amber-500", bg: "bg-amber-50 border-amber-100" },
-  { icon: Zap,         title: "FinBERT Sentiment",       desc: "Real-time news sentiment using finance-tuned NLP model.", color: "text-sky-500", bg: "bg-sky-50 border-sky-100" },
-  { icon: Sparkles,    title: "AI Investment Thesis",    desc: "Full written AI thesis — Summary, Catalysts, and Risks.", color: "text-pink-500", bg: "bg-pink-50 border-pink-100" },
+  { icon: Brain,       title: "4-Factor AI Score",       desc: "Technical + Fundamental + Sentiment + Risk scored 0–100.", color: "text-indigo-400", bg: "bg-indigo-500/10 border-indigo-500/20" },
+  { icon: TrendingUp,  title: "Price Chart + Signals",   desc: "Candlestick chart with SMA-50/200 and BUY/SELL markers.", color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+  { icon: BarChart3,   title: "RSI, MACD & Volume",      desc: "Technical indicator panels with overbought/oversold zones.", color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20" },
+  { icon: ShieldCheck, title: "Bull / Bear Case",        desc: "Numbered AI-generated reasons for and against investing.", color: "text-amber-400", bg: "bg-amber-500/10 border-amber-500/20" },
+  { icon: Zap,         title: "FinBERT Sentiment",       desc: "Real-time news sentiment using finance-tuned NLP model.", color: "text-sky-400", bg: "bg-sky-500/10 border-sky-500/20" },
+  { icon: Sparkles,    title: "AI Investment Thesis",    desc: "Full written AI thesis — Summary, Catalysts, and Risks.", color: "text-pink-400", bg: "bg-pink-500/10 border-pink-500/20" },
 ];
 
 const TRENDING_STOCKS = [
@@ -96,15 +96,15 @@ function InvestmentThesis({ thesis, symbol }: { thesis: string; symbol: string }
   })();
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 via-white to-slate-50 border border-indigo-100 rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-[#0B1120] border border-white/5 rounded-2xl shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-5 border-b border-indigo-100 flex items-center justify-between bg-white/60">
+      <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between bg-white/5">
         <div className="flex items-start gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm shrink-0">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">AI Investment Thesis</h3>
+            <h3 className="text-sm font-black text-white uppercase tracking-wider">AI Investment Thesis</h3>
             <p className="text-xs text-slate-400 mt-0.5">Full written analysis from the AI model — like a mini analyst report for {symbol}.</p>
           </div>
         </div>
@@ -115,9 +115,9 @@ function InvestmentThesis({ thesis, symbol }: { thesis: string; symbol: string }
           <button
             onClick={handleCopy}
             title="Copy thesis to clipboard"
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-300 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 hover:text-white transition-all"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? "Copied!" : "Copy"}
           </button>
         </div>
@@ -139,16 +139,16 @@ function InvestmentThesis({ thesis, symbol }: { thesis: string; symbol: string }
                   <s.icon className="w-4 h-4" />
                   {s.header}
                 </div>
-                <p className="text-sm text-slate-700 leading-relaxed">{s.content}</p>
-                {i < sections.length - 1 && <div className="border-t border-slate-100 mt-2" />}
+                <p className="text-sm text-slate-300 leading-relaxed">{s.content}</p>
+                {i < sections.length - 1 && <div className="border-t border-white/5 mt-2" />}
               </div>
             ))}
           </div>
         ) : (
           // Plain text — still looks great
           <div className="flex gap-4">
-            <div className="w-1 bg-gradient-to-b from-indigo-400 to-violet-400 rounded-full shrink-0" />
-            <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{thesis}</p>
+            <div className="w-1 bg-gradient-to-b from-indigo-500 to-violet-500 rounded-full shrink-0" />
+            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">{thesis}</p>
           </div>
         )}
       </div>
@@ -213,11 +213,11 @@ function AnalysisContent() {
 
       {/* ── Header & Search ──────────────────────── */}
       <div className="flex flex-col items-center justify-center text-center mt-4">
-        <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-center justify-center mb-5 shadow-sm">
-          <Sparkles className="w-6 h-6 text-indigo-600" />
+        <div className="w-12 h-12 bg-indigo-500/10 border border-indigo-500/20 rounded-2xl flex items-center justify-center mb-5 shadow-sm">
+          <Sparkles className="w-6 h-6 text-indigo-400" />
         </div>
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-2">Institutional Analysis Terminal</h1>
-        <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
+        <h1 className="text-3xl font-black text-white tracking-tight mb-2">Institutional Analysis Terminal</h1>
+        <p className="text-slate-400 max-w-xl mx-auto text-sm leading-relaxed">
           Enter any NSE, BSE, or US ticker for deep AI-powered technical, fundamental, and sentiment analysis — in seconds.
         </p>
 
@@ -240,7 +240,7 @@ function AnalysisContent() {
               onFocus={() => setShowDropdown(true)}
               onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
               placeholder="Enter ANY symbol — e.g. INFY.NS, AAPL, NVDA, RELIANCE.NS..."
-              className="w-full pl-12 pr-36 py-4 bg-white border border-slate-200 rounded-xl text-base text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all uppercase placeholder:normal-case placeholder:text-slate-400 shadow-sm"
+              className="w-full pl-12 pr-36 py-4 bg-[#0B1120] border border-white/10 rounded-xl text-base text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all uppercase placeholder:normal-case placeholder:text-slate-500 shadow-sm"
             />
             <button
               type="submit"
@@ -257,20 +257,20 @@ function AnalysisContent() {
 
           {/* Autocomplete */}
           {showDropdown && searchQuery && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl z-50 max-h-80 overflow-y-auto text-left">
+            <div className="absolute top-full left-0 right-0 mt-2 bg-[#0B1120] border border-white/10 rounded-xl shadow-xl z-50 max-h-80 overflow-y-auto text-left">
               <ul className="py-2">
                 {filteredStocks.map((stock) => (
                   <li key={stock.symbol}>
                     <button
                       type="button"
                       onClick={() => handleTagClick(stock.symbol)}
-                      className="w-full text-left px-6 py-3 hover:bg-slate-50 transition-colors flex items-center justify-between group"
+                      className="w-full text-left px-6 py-3 hover:bg-white/5 transition-colors flex items-center justify-between group"
                     >
                       <div>
-                        <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{stock.symbol}</span>
+                        <span className="font-bold text-white group-hover:text-indigo-400 transition-colors">{stock.symbol}</span>
                         <span className="text-sm text-slate-400 ml-3">{stock.name}</span>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-400 transition-colors" />
+                      <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-indigo-400 transition-colors" />
                     </button>
                   </li>
                 ))}
@@ -279,10 +279,10 @@ function AnalysisContent() {
                     <button
                       type="button"
                       onClick={() => { setActiveSymbol(searchQuery.toUpperCase()); setShowDropdown(false); }}
-                      className="w-full text-left px-6 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-3 text-indigo-700 border-t border-slate-100"
+                      className="w-full text-left px-6 py-3 hover:bg-indigo-500/10 transition-colors flex items-center gap-3 text-indigo-400 border-t border-white/5"
                     >
                       <Search className="w-4 h-4" />
-                      Search for <strong className="ml-1">{searchQuery.toUpperCase()}</strong>
+                      Search for <strong className="ml-1 text-white">{searchQuery.toUpperCase()}</strong>
                     </button>
                   </li>
                 )}
@@ -302,7 +302,7 @@ function AnalysisContent() {
                 <button
                   key={s.symbol}
                   onClick={() => handleTagClick(s.symbol)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:border-indigo-300 hover:text-indigo-700 hover:bg-indigo-50 transition-all shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0B1120] border border-white/5 rounded-lg text-sm font-semibold text-slate-300 hover:border-indigo-500/50 hover:text-white hover:bg-indigo-500/10 transition-all shadow-sm"
                 >
                   <span>{s.symbol.includes(".NS") ? "🇮🇳" : "🇺🇸"}</span>
                   {s.symbol}
@@ -315,9 +315,9 @@ function AnalysisContent() {
 
       {/* ── Empty / Onboarding State ─────────────── */}
       {!activeSymbol && !isAnyLoading && (
-        <div className="border-t border-slate-200/60 pt-8">
+        <div className="border-t border-white/10 pt-8">
           <div className="text-center mb-8">
-            <h2 className="text-lg font-black text-slate-800 mb-1">What you'll get instantly</h2>
+            <h2 className="text-lg font-black text-white mb-1">What you'll get instantly</h2>
             <p className="text-sm text-slate-400">3 seconds to a complete institutional analysis of any stock.</p>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-10 max-w-2xl mx-auto justify-center">
@@ -327,12 +327,12 @@ function AnalysisContent() {
               { n: "3", t: "Get Thesis",    d: "BUY/HOLD/SELL with full explanation"   },
             ].map((step, i) => (
               <div key={i} className="flex items-start gap-3">
-                <div className="step-number shrink-0">{step.n}</div>
+                <div className="step-number shrink-0 !border-white/10 !bg-[#0B1120] text-slate-300">{step.n}</div>
                 <div>
-                  <div className="text-sm font-bold text-slate-800">{step.t}</div>
+                  <div className="text-sm font-bold text-white">{step.t}</div>
                   <div className="text-xs text-slate-400">{step.d}</div>
                 </div>
-                {i < 2 && <div className="hidden sm:block text-slate-200 text-lg mx-2 mt-1">→</div>}
+                {i < 2 && <div className="hidden sm:block text-slate-600 text-lg mx-2 mt-1">→</div>}
               </div>
             ))}
           </div>
@@ -343,8 +343,8 @@ function AnalysisContent() {
                   <f.icon className={`w-5 h-5 ${f.color}`} />
                 </div>
                 <div>
-                  <div className="font-bold text-sm text-slate-800 mb-0.5">{f.title}</div>
-                  <div className="text-xs text-slate-500 leading-relaxed">{f.desc}</div>
+                  <div className="font-bold text-sm text-white mb-0.5">{f.title}</div>
+                  <div className="text-xs text-slate-400 leading-relaxed">{f.desc}</div>
                 </div>
               </div>
             ))}
@@ -354,12 +354,12 @@ function AnalysisContent() {
 
       {/* ── Error State ─────────────────────────── */}
       {analysisError && (
-        <div className="bg-red-50 border border-red-100 rounded-xl p-6 text-center">
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 text-center">
           <div className="text-2xl mb-2">⚠️</div>
-          <div className="font-bold text-red-700 mb-1">Analysis failed for "{activeSymbol}"</div>
-          <p className="text-sm text-red-500 max-w-md mx-auto">
-            Check the ticker format. NSE/BSE stocks need <strong>.NS</strong> suffix (e.g. <code className="bg-red-100 px-1 rounded">INFY.NS</code>).
-            US stocks use plain ticker (e.g. <code className="bg-red-100 px-1 rounded">AAPL</code>).
+          <div className="font-bold text-red-400 mb-1">Analysis failed for "{activeSymbol}"</div>
+          <p className="text-sm text-red-400/80 max-w-md mx-auto">
+            Check the ticker format. NSE/BSE stocks need <strong>.NS</strong> suffix (e.g. <code className="bg-red-500/20 px-1 rounded">INFY.NS</code>).
+            US stocks use plain ticker (e.g. <code className="bg-red-500/20 px-1 rounded">AAPL</code>).
           </p>
         </div>
       )}
@@ -367,18 +367,18 @@ function AnalysisContent() {
       {/* ── Skeleton Loaders ─────────────────────── */}
       {isAnyLoading && (
         <div className="flex flex-col gap-6 mt-4 animate-pulse">
-          <div className="h-[160px] bg-slate-200/60 rounded-2xl" />
+          <div className="h-[160px] bg-white/5 rounded-2xl" />
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => <div key={i} className="h-[140px] bg-slate-200/60 rounded-2xl" />)}
+            {[1,2,3,4].map(i => <div key={i} className="h-[140px] bg-white/5 rounded-2xl" />)}
           </div>
-          <div className="h-[520px] bg-slate-200/60 rounded-2xl" />
-          <div className="h-[280px] bg-slate-200/60 rounded-2xl" />
+          <div className="h-[520px] bg-white/5 rounded-2xl" />
+          <div className="h-[280px] bg-white/5 rounded-2xl" />
         </div>
       )}
 
       {/* ── Analysis Results ─────────────────────── */}
       {analysisData && !isAnyLoading && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 border-t border-slate-200/60 pt-8 flex flex-col gap-8">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 border-t border-white/10 pt-8 flex flex-col gap-8">
 
           {/* 1. Recommendation — with REAL price */}
           <RecommendationCard
@@ -392,7 +392,7 @@ function AnalysisContent() {
           <div>
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">4-Factor AI Score Breakdown</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">4-Factor AI Score Breakdown</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Each factor is scored 0–100. Hover the ⓘ icons for explanations.</p>
               </div>
               <div className="flex gap-3 text-xs">
@@ -416,16 +416,16 @@ function AnalysisContent() {
           </div>
 
           {/* 3. Price Chart + Signals */}
-          <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 bg-slate-50/40 flex items-start justify-between">
+          <div className="bg-[#0B1120] border border-white/5 rounded-2xl shadow-sm overflow-hidden">
+            <div className="px-6 py-5 border-b border-white/5 bg-white/5 flex items-start justify-between">
               <div>
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Price Action & AI Signal Overlay</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Price Action & AI Signal Overlay</h3>
                 <p className="text-xs text-slate-400 mt-0.5">
                   Candlestick chart with SMA-50 (blue) and SMA-200 (amber) overlays.
                   {chartSignals.length > 0 && ` ${chartSignals.length} AI signal${chartSignals.length > 1 ? "s" : ""} plotted.`}
                 </p>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-100 rounded-lg text-xs font-bold text-emerald-700">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-xs font-bold text-emerald-400">
                 <Zap className="w-3 h-3" />
                 {currentPrice > 0
                   ? `Live: ${currentPrice > 500 ? "₹" : "$"}${currentPrice.toFixed(2)}`
@@ -451,7 +451,7 @@ function AnalysisContent() {
           {historyData && (
             <div>
               <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Technical Indicator Panels</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Technical Indicator Panels</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Switch tabs. Each panel includes interpretation guides so you know what you're looking at.</p>
               </div>
               <IndicatorTabs
@@ -466,7 +466,7 @@ function AnalysisContent() {
           {((signalsData && signalsData.length > 0) || (sentimentData && sentimentData.length > 0)) && (
             <div>
               <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Signal & Sentiment History</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Signal & Sentiment History</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Historical AI trade signals and FinBERT news sentiment over time.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -483,7 +483,7 @@ function AnalysisContent() {
             </div>
             <div className="lg:col-span-2">
               <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Bull vs Bear Case</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Bull vs Bear Case</h3>
                 <p className="text-xs text-slate-400 mt-0.5">AI-ranked reasons for and against. #1 item = most influential factor.</p>
               </div>
               <BullBearCard
@@ -497,14 +497,14 @@ function AnalysisContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Key Strengths</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Key Strengths</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Positive signals driving the recommendation.</p>
               </div>
               <StrengthsCard strengths={analysisData.strengths || []} />
             </div>
             <div>
               <div className="mb-2">
-                <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Risk Factors</h3>
+                <h3 className="text-sm font-black text-white uppercase tracking-wider">Risk Factors</h3>
                 <p className="text-xs text-slate-400 mt-0.5">Warnings to weigh before investing.</p>
               </div>
               <RisksCard risks={analysisData.risk_factors || []} />

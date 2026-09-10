@@ -47,9 +47,9 @@ export default function SettingsPage() {
     <div className="flex flex-col gap-8 max-w-[1200px] mx-auto font-sans pb-10">
 
       {/* ── Page Header ─────────────────────────────── */}
-      <div className="pb-4 border-b border-slate-200/60">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Settings & Preferences</h1>
-        <p className="text-sm text-slate-500 mt-1">
+      <div className="pb-4 border-b border-white/5">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Settings & Preferences</h1>
+        <p className="text-sm text-slate-400 mt-1">
           Manage your account, customise the AI engine, configure alerts, and control data privacy.
         </p>
       </div>
@@ -65,8 +65,8 @@ export default function SettingsPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-start gap-3 w-full px-4 py-3 rounded-xl text-sm font-semibold transition-all text-left ${
                     activeTab === tab.id
-                      ? "bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-sm"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 shadow-sm"
+                      : "text-slate-400 hover:bg-white/5 hover:text-white"
                   }`}
                 >
                   <tab.icon className={`w-4 h-4 mt-0.5 shrink-0 ${activeTab === tab.id ? "text-indigo-600" : "text-slate-400"}`} />
@@ -86,9 +86,9 @@ export default function SettingsPage() {
           {activeTabData && (
             <div className="mb-6">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-black text-slate-900">{activeTabData.label}</h2>
+                <h2 className="text-lg font-black text-white">{activeTabData.label}</h2>
                 <div className="tooltip-container">
-                  <HelpCircle className="w-4 h-4 text-slate-300 cursor-help" />
+                  <HelpCircle className="w-4 h-4 text-slate-500 cursor-help" />
                   <div className="tooltip-box w-52">{activeTabData.tooltip}</div>
                 </div>
               </div>

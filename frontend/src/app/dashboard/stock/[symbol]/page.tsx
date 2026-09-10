@@ -54,26 +54,26 @@ export default async function StockAnalysisPage({ params }: { params: Promise<{ 
       
       {/* Navigation */}
       <div>
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-indigo-700 transition-colors uppercase tracking-wider">
+        <Link href="/dashboard" className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-indigo-400 transition-colors uppercase tracking-wider">
           <ArrowLeft className="w-4 h-4" strokeWidth={2} />
           Back to Overview
         </Link>
       </div>
 
       {/* 1. Company Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/5 pb-6">
         <div className="flex items-center gap-5">
-          <div className="w-16 h-16 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-2xl tracking-tighter">
+          <div className="w-16 h-16 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 font-bold text-2xl tracking-tighter">
             {symbol.substring(0, 2)}
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">{symbol}</h1>
-            <p className="text-sm font-semibold text-slate-500 uppercase tracking-widest mt-1">{companyData.name}</p>
+            <h1 className="text-3xl font-bold text-white tracking-tight">{symbol}</h1>
+            <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mt-1">{companyData.name}</p>
           </div>
         </div>
         <div className="text-left md:text-right">
-          <div className="text-3xl font-mono font-bold text-slate-900 tracking-tight">{companyData.price}</div>
-          <div className={`text-sm font-bold mt-1 ${companyData.isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
+          <div className="text-3xl font-mono font-bold text-white tracking-tight">{companyData.price}</div>
+          <div className={`text-sm font-bold mt-1 ${companyData.isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
             {companyData.change} Today
           </div>
         </div>
@@ -85,37 +85,37 @@ export default async function StockAnalysisPage({ params }: { params: Promise<{ 
         <div className="flex flex-col gap-6">
           
           {/* 2. Recommendation Card */}
-          <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6 relative overflow-hidden">
+          <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-            <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4">AI Signal</div>
+            <div className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">AI Signal</div>
             <div className="flex items-center gap-4">
-              <span className="inline-block px-4 py-1.5 text-lg font-bold uppercase tracking-widest rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/50">
+              <span className="inline-block px-4 py-1.5 text-lg font-bold uppercase tracking-widest rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
                 {aiAnalysis.recommendation}
               </span>
               <div>
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider">Target Price</div>
-                <div className="font-bold text-slate-900 text-lg">{aiAnalysis.targetPrice}</div>
+                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Target Price</div>
+                <div className="font-bold text-white text-lg">{aiAnalysis.targetPrice}</div>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-slate-600">
+            <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-2 text-xs font-semibold text-slate-400">
               <Target className="w-4 h-4 text-slate-400" /> Timeframe: {aiAnalysis.timeframe}
             </div>
           </div>
 
           {/* 3. Confidence Score */}
-          <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6">
+          <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="text-xs font-semibold text-slate-500 uppercase tracking-widest">AI Confidence</div>
-              <div className="font-mono text-xl font-bold text-slate-900">{aiAnalysis.confidence}%</div>
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-widest">AI Confidence</div>
+              <div className="font-mono text-xl font-bold text-white">{aiAnalysis.confidence}%</div>
             </div>
             {/* Progress Bar */}
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+            <div className="w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-indigo-600 rounded-full" 
+                className="h-full bg-indigo-500 rounded-full" 
                 style={{ width: `${aiAnalysis.confidence}%` }}
               ></div>
             </div>
-            <p className="text-xs text-slate-500 mt-4 leading-relaxed">
+            <p className="text-xs text-slate-400 mt-4 leading-relaxed">
               Based on an aggregate of 45 technical indicators, news sentiment analysis, and historical pattern matching.
             </p>
           </div>
@@ -129,49 +129,49 @@ export default async function StockAnalysisPage({ params }: { params: Promise<{ 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             
             {/* 4. Technical Scores */}
-            <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6">
+            <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6">
               <div className="flex items-center gap-2 mb-5">
                 <BarChart3 className="w-4 h-4 text-slate-400" />
-                <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Technical Profile</h2>
+                <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Technical Profile</h2>
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Trend</span>
-                  <span className="text-sm font-bold text-emerald-600">{aiAnalysis.technicalScores.trend}</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Trend</span>
+                  <span className="text-sm font-bold text-emerald-400">{aiAnalysis.technicalScores.trend}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">RSI (14)</span>
-                  <span className="text-sm font-bold text-slate-900">{aiAnalysis.technicalScores.rsi}</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">RSI (14)</span>
+                  <span className="text-sm font-bold text-white">{aiAnalysis.technicalScores.rsi}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">MACD</span>
-                  <span className="text-sm font-bold text-slate-900">{aiAnalysis.technicalScores.macd}</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">MACD</span>
+                  <span className="text-sm font-bold text-white">{aiAnalysis.technicalScores.macd}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Volatility</span>
-                  <span className="text-sm font-bold text-slate-900">{aiAnalysis.technicalScores.volatility}</span>
+                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Volatility</span>
+                  <span className="text-sm font-bold text-white">{aiAnalysis.technicalScores.volatility}</span>
                 </div>
               </div>
             </div>
 
             {/* 5. Sentiment Score */}
-            <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6">
+            <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6">
               <div className="flex items-center gap-2 mb-5">
                 <Newspaper className="w-4 h-4 text-slate-400" />
-                <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Market Sentiment</h2>
+                <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Market Sentiment</h2>
               </div>
               <div className="flex items-end gap-3 mb-4">
-                <div className="text-4xl font-bold font-mono text-slate-900 tracking-tighter">{aiAnalysis.sentimentScore.overall}</div>
-                <div className="text-sm font-bold text-emerald-600 mb-1">{aiAnalysis.sentimentScore.label}</div>
+                <div className="text-4xl font-bold font-mono text-white tracking-tighter">{aiAnalysis.sentimentScore.overall}</div>
+                <div className="text-sm font-bold text-emerald-400 mb-1">{aiAnalysis.sentimentScore.label}</div>
               </div>
-              <div className="space-y-3 pt-3 border-t border-slate-100">
+              <div className="space-y-3 pt-3 border-t border-white/5">
                  <div className="flex justify-between items-center">
-                  <span className="text-xs font-medium text-slate-500">News Impact</span>
-                  <span className="text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-sm">{aiAnalysis.sentimentScore.newsImpact}</span>
+                  <span className="text-xs font-medium text-slate-400">News Impact</span>
+                  <span className="text-xs font-bold text-white bg-white/10 px-2 py-0.5 rounded-sm">{aiAnalysis.sentimentScore.newsImpact}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-medium text-slate-500">Social Mentions</span>
-                  <span className="text-xs font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-sm">{aiAnalysis.sentimentScore.socialMentions}</span>
+                  <span className="text-xs font-medium text-slate-400">Social Mentions</span>
+                  <span className="text-xs font-bold text-white bg-white/10 px-2 py-0.5 rounded-sm">{aiAnalysis.sentimentScore.socialMentions}</span>
                 </div>
               </div>
             </div>
@@ -179,32 +179,32 @@ export default async function StockAnalysisPage({ params }: { params: Promise<{ 
           </div>
 
           {/* 6. Investment Thesis */}
-          <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6">
+          <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-4 h-4 text-emerald-500" />
-              <h2 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Investment Thesis</h2>
+              <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Investment Thesis</h2>
             </div>
             <ul className="space-y-3">
               {aiAnalysis.investmentThesis.map((point, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-slate-700 leading-relaxed">{point}</span>
+                  <span className="text-sm text-slate-300 leading-relaxed">{point}</span>
                 </li>
               ))}
             </ul>
           </div>
 
           {/* 7. Risk Analysis */}
-          <div className="bg-red-50/30 border border-red-100 rounded-xl p-6">
+          <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6">
             <div className="flex items-center gap-2 mb-4">
-              <ShieldAlert className="w-4 h-4 text-red-500" />
-              <h2 className="text-sm font-semibold text-red-900 uppercase tracking-wider">Key Risk Factors</h2>
+              <ShieldAlert className="w-4 h-4 text-red-400" />
+              <h2 className="text-sm font-semibold text-red-400 uppercase tracking-wider">Key Risk Factors</h2>
             </div>
             <ul className="space-y-3">
               {aiAnalysis.riskAnalysis.map((risk, idx) => (
                 <li key={idx} className="flex items-start gap-3">
                   <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-red-900 leading-relaxed">{risk}</span>
+                  <span className="text-sm text-red-400 leading-relaxed">{risk}</span>
                 </li>
               ))}
             </ul>

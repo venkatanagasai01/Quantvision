@@ -27,11 +27,19 @@ import logging
 
 market_cache = TTLCache(maxsize=1, ttl=3600) # Cache for 1 hour
 
-@router.get("/market-overview")
-def get_market_overview():
-    if "overview" in market_cache:
-        return market_cache["overview"]
-        
+from fastapi import BackgroundTasks
+
+fallback_market_data = {
+    "nifty": {"price": 23500.00, "change": "+0.50%", "isPositive": True},
+    "sensex": {"price": 77000.00, "change": "+0.45%", "isPositive": True},
+    "sp500": {"price": 5400.00, "change": "-0.10%", "isPositive": False},
+    "nasdaq": {"price": 17800.00, "change": "+0.80%", "isPositive": True},
+    "market_status": "OPEN",
+    "top_gainers": ["RELIANCE", "TCS", "INFY"],
+    "top_losers": ["PAYTM", "HDFCBANK", "WIPRO"]
+}
+
+def fetch_market_data_background():
     try:
         tickers = ["^NSEI", "^BSESN", "^GSPC", "^IXIC"]
         data = yf.download(tickers, period="5d", progress=False)
@@ -58,25 +66,22 @@ def get_market_overview():
             "top_losers": ["PAYTM", "HDFCBANK", "WIPRO"]
         }
         
-        # Check if all returned N/A (happens on rate limit returning empty df without throwing exception)
-        if result["nifty"]["price"] == "N/A" and result["sp500"]["price"] == "N/A":
-            raise Exception("yfinance returned empty data")
-            
-        market_cache["overview"] = result
-        return result
+        if result["nifty"]["price"] != "N/A" or result["sp500"]["price"] != "N/A":
+            market_cache["overview"] = result
     except Exception as e:
-        logging.warning(f"Market Data Error: {e}. Using fallback data.")
-        # Graceful fallback so UI doesn't break during yfinance rate limits
-        fallback = {
-            "nifty": {"price": 23500.00, "change": "+0.50%", "isPositive": True},
-            "sensex": {"price": 77000.00, "change": "+0.45%", "isPositive": True},
-            "sp500": {"price": 5400.00, "change": "-0.10%", "isPositive": False},
-            "nasdaq": {"price": 17800.00, "change": "+0.80%", "isPositive": True},
-            "market_status": "OPEN",
-            "top_gainers": ["RELIANCE", "TCS", "INFY"],
-            "top_losers": ["PAYTM", "HDFCBANK", "WIPRO"]
-        }
-        return fallback
+        logging.warning(f"Background Market Data Error: {e}")
+
+@router.get("/market-overview")
+def get_market_overview(background_tasks: BackgroundTasks):
+    if "overview" in market_cache:
+        return market_cache["overview"]
+    
+    # Cache is empty (e.g., first load after server start)
+    # Trigger background fetch so it doesn't block the API response
+    background_tasks.add_task(fetch_market_data_background)
+    
+    # Return fallback immediately for an instant load
+    return fallback_market_data
 
 @router.get("/portfolio-summary")
 def get_portfolio_summary(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):

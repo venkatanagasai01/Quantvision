@@ -12,9 +12,9 @@ export default function WatchlistAnalytics({ data, isLoading }: WatchlistAnalyti
     return (
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {Array(5).fill(0).map((_, i) => (
-          <div key={i} className="bg-white p-5 border border-slate-200/60 rounded-xl shadow-sm animate-pulse h-[104px]">
-            <div className="h-3 w-20 bg-slate-200 rounded mb-4"></div>
-            <div className="h-6 w-24 bg-slate-200 rounded"></div>
+          <div key={i} className="bg-[#0B1120] p-5 border border-white/5 rounded-xl shadow-sm animate-pulse h-[104px]">
+            <div className="h-3 w-20 bg-white/10 rounded mb-4"></div>
+            <div className="h-6 w-24 bg-white/10 rounded"></div>
           </div>
         ))}
       </div>
@@ -40,22 +40,22 @@ export default function WatchlistAnalytics({ data, isLoading }: WatchlistAnalyti
   const mostBearish = [...itemsWithConf].sort((a, b) => a.confidence_score - b.confidence_score)[0]?.symbol || "N/A";
 
   const metrics = [
-    { name: "TOTAL STOCKS", value: totalStocks, icon: Layers, color: "text-indigo-600" },
-    { name: "AVG SENTIMENT", value: avgSentiment, icon: Activity, color: "text-amber-600" },
-    { name: "AVG CONFIDENCE", value: `${avgConfidence}%`, icon: Target, color: "text-emerald-600" },
-    { name: "MOST BULLISH", value: mostBullish, icon: TrendingUp, color: "text-emerald-600" },
-    { name: "MOST BEARISH", value: mostBearish, icon: TrendingDown, color: "text-red-600" },
+    { name: "TOTAL STOCKS", value: totalStocks, icon: Layers, color: "text-indigo-400" },
+    { name: "AVG SENTIMENT", value: avgSentiment, icon: Activity, color: "text-amber-400" },
+    { name: "AVG CONFIDENCE", value: `${avgConfidence}%`, icon: Target, color: "text-emerald-400" },
+    { name: "MOST BULLISH", value: mostBullish, icon: TrendingUp, color: "text-emerald-400" },
+    { name: "MOST BEARISH", value: mostBearish, icon: TrendingDown, color: "text-red-400" },
   ];
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
       {metrics.map((item) => (
-        <div key={item.name} className="bg-white p-5 border border-slate-200/60 rounded-xl shadow-sm">
+        <div key={item.name} className="bg-[#0B1120] p-5 border border-white/5 rounded-xl shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{item.name}</div>
+            <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.name}</div>
             <item.icon className={`w-4 h-4 ${item.color} opacity-70`} />
           </div>
-          <div className="text-2xl font-bold text-slate-900 tracking-tight">{item.value}</div>
+          <div className="text-2xl font-bold text-white tracking-tight">{item.value}</div>
         </div>
       ))}
     </div>

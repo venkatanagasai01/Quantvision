@@ -19,12 +19,12 @@ function getSignalMeta(recommendation: string, confidence: number) {
       label: "STRONG BUY",
       strengthLabel: "Very High Conviction",
       Icon: TrendingUp,
-      gradient: "from-emerald-500/10 via-emerald-50/60 to-white",
-      border: "border-emerald-200",
-      glow: "shadow-emerald-100",
-      textColor: "text-emerald-600",
+      gradient: "from-emerald-500/20 via-emerald-500/5 to-[#0B1120]",
+      border: "border-emerald-500/20",
+      glow: "shadow-emerald-500/10",
+      textColor: "text-emerald-400",
       barColor: "bg-emerald-500",
-      badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-200",
+      badgeBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
       ringColor: "#10b981",
       dot: "bg-emerald-500",
     };
@@ -34,12 +34,12 @@ function getSignalMeta(recommendation: string, confidence: number) {
       label: "BUY",
       strengthLabel: confidence >= 65 ? "High Conviction" : "Moderate Conviction",
       Icon: TrendingUp,
-      gradient: "from-emerald-500/8 via-emerald-50/40 to-white",
-      border: "border-emerald-200",
-      glow: "shadow-emerald-50",
-      textColor: "text-emerald-600",
+      gradient: "from-emerald-500/15 via-emerald-500/5 to-[#0B1120]",
+      border: "border-emerald-500/20",
+      glow: "shadow-emerald-500/5",
+      textColor: "text-emerald-400",
       barColor: "bg-emerald-500",
-      badgeBg: "bg-emerald-100 text-emerald-800 border-emerald-200",
+      badgeBg: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
       ringColor: "#10b981",
       dot: "bg-emerald-500",
     };
@@ -49,12 +49,12 @@ function getSignalMeta(recommendation: string, confidence: number) {
       label: "STRONG SELL",
       strengthLabel: "Very High Conviction",
       Icon: TrendingDown,
-      gradient: "from-red-500/10 via-red-50/60 to-white",
-      border: "border-red-200",
-      glow: "shadow-red-100",
-      textColor: "text-red-600",
+      gradient: "from-red-500/20 via-red-500/5 to-[#0B1120]",
+      border: "border-red-500/20",
+      glow: "shadow-red-500/10",
+      textColor: "text-red-400",
       barColor: "bg-red-500",
-      badgeBg: "bg-red-100 text-red-800 border-red-200",
+      badgeBg: "bg-red-500/10 text-red-400 border-red-500/20",
       ringColor: "#ef4444",
       dot: "bg-red-500",
     };
@@ -64,12 +64,12 @@ function getSignalMeta(recommendation: string, confidence: number) {
       label: "SELL",
       strengthLabel: confidence >= 65 ? "High Conviction" : "Moderate Conviction",
       Icon: TrendingDown,
-      gradient: "from-red-500/8 via-red-50/40 to-white",
-      border: "border-red-200",
-      glow: "shadow-red-50",
-      textColor: "text-red-600",
+      gradient: "from-red-500/15 via-red-500/5 to-[#0B1120]",
+      border: "border-red-500/20",
+      glow: "shadow-red-500/5",
+      textColor: "text-red-400",
       barColor: "bg-red-500",
-      badgeBg: "bg-red-100 text-red-800 border-red-200",
+      badgeBg: "bg-red-500/10 text-red-400 border-red-500/20",
       ringColor: "#ef4444",
       dot: "bg-red-500",
     };
@@ -78,12 +78,12 @@ function getSignalMeta(recommendation: string, confidence: number) {
     label: "HOLD",
     strengthLabel: "Neutral Outlook",
     Icon: Minus,
-    gradient: "from-amber-500/8 via-amber-50/30 to-white",
-    border: "border-amber-200",
-    glow: "shadow-amber-50",
-    textColor: "text-amber-600",
+    gradient: "from-amber-500/15 via-amber-500/5 to-[#0B1120]",
+    border: "border-amber-500/20",
+    glow: "shadow-amber-500/5",
+    textColor: "text-amber-400",
     barColor: "bg-amber-400",
-    badgeBg: "bg-amber-100 text-amber-800 border-amber-200",
+    badgeBg: "bg-amber-500/10 text-amber-400 border-amber-500/20",
     ringColor: "#f59e0b",
     dot: "bg-amber-400",
   };
@@ -91,18 +91,18 @@ function getSignalMeta(recommendation: string, confidence: number) {
 
 function ConfidenceBand({ confidence }: { confidence: number }) {
   const bands = [
-    { min: 0,  max: 40, label: "Weak",     color: "bg-red-400"   },
-    { min: 40, max: 60, label: "Moderate",  color: "bg-amber-400" },
-    { min: 60, max: 80, label: "High",      color: "bg-blue-400"  },
+    { min: 0,  max: 40, label: "Weak",     color: "bg-red-500"   },
+    { min: 40, max: 60, label: "Moderate",  color: "bg-amber-500" },
+    { min: 60, max: 80, label: "High",      color: "bg-blue-500"  },
     { min: 80, max: 101,label: "Very High", color: "bg-emerald-500"},
   ];
   const current = bands.find(b => confidence >= b.min && confidence < b.max) || bands[3];
   return (
-    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-      current.label === "Very High" ? "bg-emerald-100 text-emerald-700" :
-      current.label === "High"      ? "bg-blue-100 text-blue-700" :
-      current.label === "Moderate"  ? "bg-amber-100 text-amber-700" :
-                                      "bg-red-100 text-red-700"
+    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+      current.label === "Very High" ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-400" :
+      current.label === "High"      ? "bg-blue-500/20 border-blue-500/30 text-blue-400" :
+      current.label === "Moderate"  ? "bg-amber-500/20 border-amber-500/30 text-amber-400" :
+                                      "bg-red-500/20 border-red-500/30 text-red-400"
     }`}>
       {current.label} Confidence
     </span>
@@ -131,9 +131,9 @@ export function RecommendationCard({ recommendation, confidence, symbol, current
             <div className="flex flex-col gap-3">
               {/* Label row */}
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/70 backdrop-blur-sm border border-slate-200/60 rounded-lg shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
-                  <span className="text-xs font-bold text-slate-600 uppercase tracking-widest">AI Consensus · {symbol}</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+                  <span className="text-xs font-bold text-slate-300 uppercase tracking-widest">AI Consensus · {symbol}</span>
                 </div>
                 <ConfidenceBand confidence={confidence} />
               </div>
@@ -149,7 +149,7 @@ export function RecommendationCard({ recommendation, confidence, symbol, current
                   <h2 className={`text-4xl lg:text-5xl font-black tracking-tight leading-none ${meta.textColor}`}>
                     {meta.label}
                   </h2>
-                  <p className="text-sm text-slate-500 font-semibold mt-1">{meta.strengthLabel}</p>
+                  <p className="text-sm text-slate-400 font-semibold mt-1">{meta.strengthLabel}</p>
                 </div>
               </div>
 
@@ -160,9 +160,9 @@ export function RecommendationCard({ recommendation, confidence, symbol, current
                   <span>Analyzed just now</span>
                 </div>
                 {currentPrice > 0 && (
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-white/70 px-2.5 py-1 rounded-lg border border-slate-200/60">
-                    <Zap className="w-3 h-3 text-indigo-500" />
-                    Market Price: <span className="font-mono ml-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-300 bg-white/5 px-2.5 py-1 rounded-lg border border-white/10">
+                    <Zap className="w-3 h-3 text-indigo-400" />
+                    Market Price: <span className="font-mono ml-1 text-white">
                       {currentPrice > 500 ? `₹${currentPrice.toFixed(2)}` : `$${currentPrice.toFixed(2)}`}
                     </span>
                   </div>
@@ -183,10 +183,10 @@ export function RecommendationCard({ recommendation, confidence, symbol, current
             </div>
 
             {/* ── Right: Confidence Meter ─────────────────── */}
-            <div className="w-full lg:w-72 bg-white/70 backdrop-blur-sm border border-slate-200/40 rounded-2xl p-5 shadow-sm">
+            <div className="w-full lg:w-72 bg-[#0B1120]/80 backdrop-blur-md border border-white/10 rounded-2xl p-5 shadow-sm">
               <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-black text-slate-700 uppercase tracking-wider">Signal Strength</span>
+                  <span className="text-xs font-black text-slate-300 uppercase tracking-wider">Signal Strength</span>
                   <div className="tooltip-container">
                     <HelpCircle className="w-3 h-3 text-slate-300 cursor-help" />
                     <div className="tooltip-box w-52">How confident the AI is in this recommendation. Above 80 = very strong signal. Below 40 = weak / uncertain.</div>
@@ -196,7 +196,7 @@ export function RecommendationCard({ recommendation, confidence, symbol, current
               </div>
 
               {/* Progress bar */}
-              <div className="relative w-full h-4 bg-slate-100 rounded-full overflow-hidden mb-2">
+              <div className="relative w-full h-4 bg-white/10 rounded-full overflow-hidden mb-2">
                 <div
                   className={`h-full rounded-full transition-all duration-1000 ease-out ${meta.barColor}`}
                   style={{ width: `${confidence}%` }}

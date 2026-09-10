@@ -56,7 +56,7 @@ export default function NotificationsTab() {
   };
 
   if (isLoading) {
-    return <div className="animate-pulse h-64 bg-slate-100 rounded-xl"></div>;
+    return <div className="animate-pulse h-64 bg-white/5 rounded-xl"></div>;
   }
 
   const alerts = [
@@ -67,10 +67,10 @@ export default function NotificationsTab() {
   ];
 
   return (
-    <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm">
-      <div className="px-6 py-5 border-b border-slate-100">
-        <h2 className="text-lg font-semibold text-slate-900 tracking-tight">Notification Settings</h2>
-        <p className="text-sm text-slate-500 mt-1">Control which alerts appear on your dashboard.</p>
+    <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm">
+      <div className="px-6 py-5 border-b border-white/5 bg-white/5">
+        <h2 className="text-lg font-semibold text-white tracking-tight">Notification Settings</h2>
+        <p className="text-sm text-slate-400 mt-1">Control which alerts appear on your dashboard.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 max-w-2xl">
@@ -78,14 +78,14 @@ export default function NotificationsTab() {
           {alerts.map((alert) => {
             const isEnabled = (formData.notifications as any)[alert.id];
             return (
-              <div key={alert.id} className="flex items-start justify-between p-4 rounded-xl border border-slate-200 hover:border-slate-300 transition-colors">
+              <div key={alert.id} className="flex items-start justify-between p-4 rounded-xl border border-white/10 hover:border-white/20 transition-colors">
                 <div className="flex gap-4">
-                  <div className={`p-2 rounded-lg ${isEnabled ? 'bg-indigo-50 text-indigo-600' : 'bg-slate-50 text-slate-400'}`}>
+                  <div className={`p-2 rounded-lg ${isEnabled ? 'bg-indigo-500/10 text-indigo-400' : 'bg-white/5 text-slate-500'}`}>
                     <alert.icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="font-semibold text-slate-900">{alert.title}</div>
-                    <div className="text-sm text-slate-500 mt-0.5">{alert.desc}</div>
+                    <div className="font-semibold text-white">{alert.title}</div>
+                    <div className="text-sm text-slate-400 mt-0.5">{alert.desc}</div>
                   </div>
                 </div>
                 
@@ -93,7 +93,7 @@ export default function NotificationsTab() {
                 <button
                   type="button"
                   onClick={() => toggleNotification(alert.id)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 ${isEnabled ? 'bg-indigo-600' : 'bg-slate-200'}`}
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-[#0B1120] ${isEnabled ? 'bg-indigo-600' : 'bg-white/10'}`}
                 >
                   <span
                     className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${isEnabled ? 'translate-x-5' : 'translate-x-0'}`}
@@ -104,8 +104,8 @@ export default function NotificationsTab() {
           })}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-          <div className="text-sm font-medium text-emerald-600">
+        <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+          <div className="text-sm font-medium text-emerald-400">
             {isSuccess && "Notifications saved successfully."}
           </div>
           <button 

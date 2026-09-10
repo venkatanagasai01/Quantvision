@@ -15,26 +15,26 @@ export default function WatchlistPage() {
       {/* ── Page Header ─────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm">
               <Star className="w-4 h-4 text-white" />
             </div>
             Institutional Watchlist
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             Track your universe of stocks with live market prices and AI-generated signals.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <WatchlistSearch />
-          <div className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200/60 rounded-lg shadow-sm h-[42px]">
-            <span className={`w-2 h-2 rounded-full ${isFetching ? 'bg-amber-400 animate-pulse' : 'bg-emerald-500'}`} />
-            <span className="text-xs font-semibold text-slate-600 hidden sm:block">
+          <div className="flex items-center gap-2 px-3 py-2 bg-[#0B1120] border border-white/5 rounded-lg shadow-sm h-[42px]">
+            <span className={`w-2 h-2 rounded-full ${isFetching ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
+            <span className="text-xs font-semibold text-slate-300 hidden sm:block">
               {isFetching ? 'Syncing...' : 'Live Polling'}
             </span>
             <div className="tooltip-container">
-              <HelpCircle className="w-3.5 h-3.5 text-slate-300 cursor-help" />
+              <HelpCircle className="w-3.5 h-3.5 text-slate-500 cursor-help" />
               <div className="tooltip-box w-52">Watchlist prices auto-refresh every 30 seconds from live market data.</div>
             </div>
           </div>
@@ -42,7 +42,7 @@ export default function WatchlistPage() {
       </div>
 
       {/* ── Signal Legend ─────────────────────────────── */}
-      <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-4">
+      <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-4">
         <div className="flex items-center gap-2 mb-3">
           <h2 className="text-xs font-black text-slate-500 uppercase tracking-widest">AI Signal Legend</h2>
           <div className="tooltip-container">
@@ -55,43 +55,43 @@ export default function WatchlistPage() {
             {
               signal: "STRONG BUY",
               icon: TrendingUp,
-              color: "text-emerald-700",
-              bg: "bg-emerald-50 border-emerald-200",
+              color: "text-emerald-400",
+              bg: "bg-emerald-500/10 border-emerald-500/20 shadow-[0_0_10px_rgba(52,211,153,0.1)]",
               desc: "AI confidence > 80%. Strong bullish fundamentals, technicals, and sentiment all aligned.",
             },
             {
               signal: "BUY",
               icon: TrendingUp,
-              color: "text-emerald-600",
-              bg: "bg-emerald-50/60 border-emerald-100",
+              color: "text-emerald-400",
+              bg: "bg-emerald-500/5 border-emerald-500/10",
               desc: "Positive outlook. Most factors are bullish. Suitable for consideration.",
             },
             {
               signal: "HOLD",
               icon: Minus,
-              color: "text-amber-600",
-              bg: "bg-amber-50 border-amber-100",
+              color: "text-amber-400",
+              bg: "bg-amber-500/10 border-amber-500/20",
               desc: "Mixed signals. Not clearly bullish or bearish. Wait for a clearer setup.",
             },
             {
               signal: "SELL",
               icon: TrendingDown,
-              color: "text-red-600",
-              bg: "bg-red-50 border-red-100",
+              color: "text-red-400",
+              bg: "bg-red-500/10 border-red-500/20",
               desc: "Negative outlook. Most factors are bearish. Consider reducing exposure.",
             },
             {
               signal: "STRONG SELL",
               icon: TrendingDown,
-              color: "text-red-700",
-              bg: "bg-red-50 border-red-200",
+              color: "text-red-400",
+              bg: "bg-red-500/10 border-red-500/20 shadow-[0_0_10px_rgba(248,113,113,0.1)]",
               desc: "AI confidence > 80% bearish. High risk. Multiple factors aligned against this stock.",
             },
             {
               signal: "N/A",
               icon: HelpCircle,
-              color: "text-slate-500",
-              bg: "bg-slate-50 border-slate-200",
+              color: "text-slate-400",
+              bg: "bg-white/5 border-white/10",
               desc: "No AI analysis has been run for this stock yet. Go to Analyze to generate a signal.",
             },
           ].map((s, i) => (
@@ -100,7 +100,7 @@ export default function WatchlistPage() {
               <div>
                 <div className={`text-xs font-black ${s.color}`}>{s.signal}</div>
                 <div className="tooltip-container">
-                  <div className="text-[10px] text-slate-400 cursor-help">{s.desc.split(".")[0]}.</div>
+                  <div className="text-[10px] text-slate-500 cursor-help">{s.desc.split(".")[0]}.</div>
                   <div className="tooltip-box w-52">{s.desc}</div>
                 </div>
               </div>

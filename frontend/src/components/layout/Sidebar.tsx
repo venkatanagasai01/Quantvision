@@ -89,16 +89,16 @@ export function Sidebar() {
   };
 
   return (
-    <div className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-slate-100 flex flex-col shadow-sm z-30">
+    <div className="fixed left-0 top-0 h-screen w-64 bg-[#0B1120] border-r border-white/5 flex flex-col shadow-sm z-30">
 
       {/* ── Brand Logo ─────────────────────────────── */}
-      <div className="h-20 flex items-center px-6 border-b border-slate-100">
+      <div className="h-20 flex items-center px-6 border-b border-white/5">
         <Link href="/" className="flex items-center gap-3 group">
           <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-sm group-hover:bg-indigo-500 transition-colors">
             <TrendingUp className="w-4 h-4 text-white" />
           </div>
           <div>
-            <div className="font-bold text-base tracking-tight text-slate-900 leading-none group-hover:text-indigo-600 transition-colors">QuantVision</div>
+            <div className="font-bold text-base tracking-tight text-white leading-none group-hover:text-indigo-400 transition-colors">QuantVision</div>
             <div className="text-[10px] font-semibold text-indigo-500 uppercase tracking-widest mt-0.5">AI Terminal</div>
           </div>
         </Link>
@@ -120,14 +120,14 @@ export function Sidebar() {
                       href={item.href}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all group ${
                         active
-                          ? "bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                          ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
+                          : "text-slate-400 hover:text-white hover:bg-white/5"
                       }`}
                     >
                       {/* Active indicator bar */}
-                      <div className={`w-1 h-5 rounded-full transition-all ${active ? "bg-indigo-500" : "bg-transparent group-hover:bg-slate-200"}`} />
+                      <div className={`w-1 h-5 rounded-full transition-all ${active ? "bg-indigo-500" : "bg-transparent group-hover:bg-white/10"}`} />
                       <item.icon
-                        className={`w-4 h-4 transition-colors ${active ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"}`}
+                        className={`w-4 h-4 transition-colors ${active ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300"}`}
                         strokeWidth={active ? 2.5 : 1.5}
                       />
                       <span>{item.name}</span>
@@ -145,12 +145,12 @@ export function Sidebar() {
       </nav>
 
       {/* ── System Status Footer ────────────────────── */}
-      <div className="p-4 border-t border-slate-100">
-        <div className="flex items-center gap-2 px-3 py-2 bg-emerald-50 rounded-lg border border-emerald-100">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+      <div className="p-4 border-t border-white/5">
+        <div className="flex items-center gap-2 px-3 py-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0 shadow-[0_0_10px_rgba(52,211,153,0.5)]" />
           <div>
-            <div className="text-xs font-bold text-emerald-700">AI Engine Online</div>
-            <div className="text-[10px] text-emerald-600">All systems operational</div>
+            <div className="text-xs font-bold text-emerald-400">AI Engine Online</div>
+            <div className="text-[10px] text-emerald-500/70">All systems operational</div>
           </div>
         </div>
       </div>

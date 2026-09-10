@@ -11,8 +11,8 @@ export function SentimentTimeline({ sentimentData }: { sentimentData: any }) {
     if (!containerRef.current || !sentimentData?.articles || sentimentData.articles.length === 0) return;
 
     const chart = createChart(containerRef.current, {
-      layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "#64748b" },
-      grid: { vertLines: { color: "#f1f5f9" }, horzLines: { color: "#f1f5f9" } },
+      layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "#94a3b8" },
+      grid: { vertLines: { color: "rgba(255, 255, 255, 0.05)" }, horzLines: { color: "rgba(255, 255, 255, 0.05)" } },
       width: containerRef.current.clientWidth,
       height: 250,
       timeScale: {
@@ -52,17 +52,17 @@ export function SentimentTimeline({ sentimentData }: { sentimentData: any }) {
 
   if (!sentimentData?.articles || sentimentData.articles.length === 0) {
     return (
-      <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6 flex flex-col items-center justify-center text-center h-[300px]">
+      <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6 flex flex-col items-center justify-center text-center h-[300px]">
         <p className="text-sm font-medium text-slate-500">No recent news articles found to construct sentiment timeline.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm p-6 h-[300px] flex flex-col">
+    <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm p-6 h-[300px] flex flex-col">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Sentiment NLP History</h3>
-        <span className="text-xs font-bold text-pink-600 bg-pink-50 px-2 py-1 rounded">Avg Score: {sentimentData.sentiment_score?.toFixed(1) || 'N/A'}</span>
+        <h3 className="text-sm font-bold text-white uppercase tracking-wider">Sentiment NLP History</h3>
+        <span className="text-xs font-bold text-pink-400 bg-pink-500/10 px-2 py-1 rounded">Avg Score: {sentimentData.sentiment_score?.toFixed(1) || 'N/A'}</span>
       </div>
       <div ref={containerRef} className="w-full flex-1" />
     </div>

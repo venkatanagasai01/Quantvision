@@ -21,13 +21,13 @@ export default function WatchlistSearch() {
   };
 
   return (
-    <form onSubmit={handleAdd} className="flex flex-col sm:flex-row items-center gap-3 bg-white p-3 border border-slate-200/60 rounded-xl shadow-sm">
+    <form onSubmit={handleAdd} className="flex flex-col sm:flex-row items-center gap-3 bg-[#0B1120] p-3 border border-white/5 rounded-xl shadow-sm">
       <input 
         type="text" 
         placeholder="Search to add (e.g. AAPL, NVDA)" 
         value={symbol}
         onChange={(e) => setSymbol(e.target.value)}
-        className="w-full sm:w-80 px-4 py-2 text-sm border border-slate-200 rounded-lg outline-none focus:border-indigo-500 transition-colors"
+        className="w-full sm:w-80 px-4 py-2 text-sm bg-white/5 border border-white/10 rounded-lg text-white outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-500"
       />
       <button 
         type="submit"

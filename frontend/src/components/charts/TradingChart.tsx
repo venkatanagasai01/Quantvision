@@ -43,12 +43,12 @@ export function TradingChart({ candles, sma50, sma200, signals }: TradingChartPr
     const chart = createChart(container, {
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#64748b",
+        textColor: "#94a3b8",
         fontFamily: "'Inter', sans-serif",
       },
       grid: {
-        vertLines: { color: "#f1f5f9" },
-        horzLines: { color: "#f1f5f9" },
+        vertLines: { color: "rgba(255, 255, 255, 0.05)" },
+        horzLines: { color: "rgba(255, 255, 255, 0.05)" },
       },
       width: container.clientWidth,
       height: 450,
@@ -68,12 +68,12 @@ export function TradingChart({ candles, sma50, sma200, signals }: TradingChartPr
         },
       },
       timeScale: {
-        borderColor: "#e2e8f0",
+        borderColor: "rgba(255, 255, 255, 0.1)",
         timeVisible: true,
         secondsVisible: false,
       },
       rightPriceScale: {
-        borderColor: "#e2e8f0",
+        borderColor: "rgba(255, 255, 255, 0.1)",
         scaleMargins: { top: 0.1, bottom: 0.1 },
       },
     });
@@ -142,7 +142,7 @@ export function TradingChart({ candles, sma50, sma200, signals }: TradingChartPr
   return (
     <div className="relative">
       {/* Chart legend */}
-      <div className="flex items-center gap-4 px-2 pb-3 text-xs font-semibold text-slate-500 flex-wrap">
+      <div className="flex items-center gap-4 px-2 pb-3 text-xs font-semibold text-slate-400 flex-wrap">
         <span className="flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-sm bg-emerald-500 inline-block" />
           Bullish candle
@@ -162,11 +162,11 @@ export function TradingChart({ candles, sma50, sma200, signals }: TradingChartPr
         {signals && signals.length > 0 && (
           <>
             <span className="flex items-center gap-1.5">
-              <span className="text-emerald-600 font-black text-base leading-none">▲</span>
+              <span className="text-emerald-400 font-black text-base leading-none">▲</span>
               AI BUY signal
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="text-red-500 font-black text-base leading-none">▼</span>
+              <span className="text-red-400 font-black text-base leading-none">▼</span>
               AI SELL signal
             </span>
           </>

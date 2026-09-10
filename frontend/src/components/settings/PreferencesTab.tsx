@@ -41,26 +41,26 @@ export default function PreferencesTab() {
   };
 
   if (isLoading) {
-    return <div className="animate-pulse h-64 bg-slate-100 rounded-xl"></div>;
+    return <div className="animate-pulse h-64 bg-white/5 rounded-xl"></div>;
   }
 
   return (
-    <div className="bg-white border border-slate-200/60 rounded-xl shadow-sm">
-      <div className="px-6 py-5 border-b border-slate-100">
-        <h2 className="text-lg font-semibold text-slate-900 tracking-tight">System Preferences</h2>
-        <p className="text-sm text-slate-500 mt-1">Configure how Quantan AI behaves and looks.</p>
+    <div className="bg-[#0B1120] border border-white/5 rounded-xl shadow-sm">
+      <div className="px-6 py-5 border-b border-white/5 bg-white/5">
+        <h2 className="text-lg font-semibold text-white tracking-tight">System Preferences</h2>
+        <p className="text-sm text-slate-400 mt-1">Configure how Quantan AI behaves and looks.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="p-6 max-w-2xl space-y-8">
         
         {/* Theme */}
         <div>
-          <label className="block text-sm font-semibold text-slate-900 mb-4">UI Theme</label>
+          <label className="block text-sm font-semibold text-white mb-4">UI Theme</label>
           <div className="grid grid-cols-3 gap-4">
             {["light", "dark", "system"].map((t) => (
               <label 
                 key={t}
-                className={`flex items-center justify-center py-3 px-4 rounded-xl border-2 cursor-pointer transition-all ${formData.theme === t ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold' : 'border-slate-200 hover:border-slate-300 text-slate-600 font-medium'}`}
+                className={`flex items-center justify-center py-3 px-4 rounded-xl border-2 cursor-pointer transition-all ${formData.theme === t ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400 font-bold' : 'border-white/10 hover:border-white/20 text-slate-400 font-medium'}`}
               >
                 <input 
                   type="radio" 
@@ -76,17 +76,17 @@ export default function PreferencesTab() {
           </div>
         </div>
 
-        <hr className="border-slate-100" />
+        <hr className="border-white/5" />
 
         {/* Risk Profile */}
         <div>
-          <label className="block text-sm font-semibold text-slate-900 mb-1">Risk Profile</label>
-          <p className="text-sm text-slate-500 mb-4">Dictates how aggressive the AI Recommendation Engine scores volatility.</p>
+          <label className="block text-sm font-semibold text-white mb-1">Risk Profile</label>
+          <p className="text-sm text-slate-400 mb-4">Dictates how aggressive the AI Recommendation Engine scores volatility.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {["Conservative", "Moderate", "Aggressive"].map((r) => (
               <label 
                 key={r}
-                className={`flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.risk_profile === r ? 'border-indigo-600 bg-indigo-50/50' : 'border-slate-200 hover:border-slate-300'}`}
+                className={`flex flex-col p-4 rounded-xl border-2 cursor-pointer transition-all ${formData.risk_profile === r ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/10 hover:border-white/20'}`}
               >
                 <input 
                   type="radio" 
@@ -96,8 +96,8 @@ export default function PreferencesTab() {
                   checked={formData.risk_profile === r}
                   onChange={() => setFormData({ ...formData, risk_profile: r })}
                 />
-                <span className={`font-bold mb-1 ${formData.risk_profile === r ? 'text-indigo-700' : 'text-slate-900'}`}>{r}</span>
-                <span className="text-xs text-slate-500">
+                <span className={`font-bold mb-1 ${formData.risk_profile === r ? 'text-indigo-400' : 'text-white'}`}>{r}</span>
+                <span className="text-xs text-slate-400">
                   {r === "Conservative" ? "Prioritize capital preservation." : r === "Moderate" ? "Balance risk and reward." : "Maximize potential alpha."}
                 </span>
               </label>
@@ -105,15 +105,15 @@ export default function PreferencesTab() {
           </div>
         </div>
 
-        <hr className="border-slate-100" />
+        <hr className="border-white/5" />
 
         {/* Benchmark */}
         <div>
-          <label className="block text-sm font-semibold text-slate-900 mb-2">Default Market Benchmark</label>
+          <label className="block text-sm font-semibold text-white mb-2">Default Market Benchmark</label>
           <select 
             value={formData.benchmark}
             onChange={(e) => setFormData({ ...formData, benchmark: e.target.value })}
-            className="w-full sm:w-64 px-4 py-2.5 text-sm border border-slate-200 rounded-lg outline-none focus:border-indigo-500 font-medium text-slate-700"
+            className="w-full sm:w-64 px-4 py-2.5 text-sm bg-[#0B1120] border border-white/10 rounded-lg outline-none focus:border-indigo-500 font-medium text-white"
           >
             <option value="S&P 500">S&P 500</option>
             <option value="NASDAQ">NASDAQ Composite</option>
@@ -122,8 +122,8 @@ export default function PreferencesTab() {
           </select>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-          <div className="text-sm font-medium text-emerald-600">
+        <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+          <div className="text-sm font-medium text-emerald-400">
             {isSuccess && "Preferences saved successfully."}
           </div>
           <button 

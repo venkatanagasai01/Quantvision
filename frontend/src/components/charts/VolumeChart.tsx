@@ -16,19 +16,19 @@ export function VolumeChart({ volume }: VolumeChartProps) {
     const chart = createChart(chartContainerRef.current, {
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#64748b",
+        textColor: "#94a3b8",
       },
       grid: {
-        vertLines: { color: "#f1f5f9" },
-        horzLines: { color: "#f1f5f9" },
+        vertLines: { color: "rgba(255, 255, 255, 0.05)" },
+        horzLines: { color: "rgba(255, 255, 255, 0.05)" },
       },
       width: chartContainerRef.current.clientWidth,
       height: 200,
       timeScale: {
-        borderColor: "#e2e8f0",
+        borderColor: "rgba(255, 255, 255, 0.1)",
       },
       rightPriceScale: {
-        borderColor: "#e2e8f0",
+        borderColor: "rgba(255, 255, 255, 0.1)",
         scaleMargins: {
           top: 0.1,
           bottom: 0,

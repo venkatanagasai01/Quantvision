@@ -17,13 +17,13 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   if (!active || !payload?.length) return null;
   const d = payload[0].payload;
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-lg px-4 py-3 text-sm min-w-[200px]">
-      <div className="font-black text-slate-900 mb-1">{d.name}</div>
+    <div className="bg-[#0B1120] border border-white/10 rounded-xl shadow-lg px-4 py-3 text-sm min-w-[200px]">
+      <div className="font-black text-white mb-1">{d.name}</div>
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-sm" style={{ background: d.color }} />
-        <span className="text-slate-600">Contribution: <strong className="text-slate-900">{d.contribution} pts</strong></span>
+        <span className="text-slate-300">Contribution: <strong className="text-white">{d.contribution} pts</strong></span>
       </div>
-      <div className="text-xs text-slate-400 mt-1.5 border-t border-slate-100 pt-1.5">{d.desc}</div>
+      <div className="text-xs text-slate-400 mt-1.5 border-t border-white/5 pt-1.5">{d.desc}</div>
     </div>
   );
 }
@@ -52,16 +52,16 @@ export function ContributionChart({ data }: { data: any }) {
   const total = chartData.reduce((s, d) => s + d.contribution, 0);
 
   return (
-    <div className="bg-white border border-slate-200/60 rounded-2xl shadow-sm overflow-hidden">
+    <div className="bg-[#0B1120] border border-white/5 rounded-2xl shadow-sm overflow-hidden">
       {/* Header */}
-      <div className="px-5 py-4 border-b border-slate-100 bg-slate-50/40">
+      <div className="px-5 py-4 border-b border-white/5 bg-white/5">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">Factor Contribution</h3>
+            <h3 className="text-sm font-black text-white uppercase tracking-wider">Factor Contribution</h3>
             <p className="text-xs text-slate-400 mt-0.5">Points each factor adds to the final AI score</p>
           </div>
           <div className="tooltip-container">
-            <HelpCircle className="w-4 h-4 text-slate-300 cursor-help" />
+            <HelpCircle className="w-4 h-4 text-slate-500 cursor-help" />
             <div className="tooltip-box w-60">
               The final score is a weighted sum: Technical (35%) + Fundamental (35%) + Sentiment (15%) + Risk (15%).
               Each bar shows how many points that factor contributed.
@@ -72,9 +72,9 @@ export function ContributionChart({ data }: { data: any }) {
 
       <div className="p-5">
         {/* Total score badge */}
-        <div className="flex items-center justify-between mb-4 p-3 bg-indigo-50 rounded-xl border border-indigo-100">
-          <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">Total Composite Score</span>
-          <span className="text-xl font-black text-indigo-700">{total.toFixed(1)}<span className="text-sm font-semibold text-indigo-400"> / 100</span></span>
+        <div className="flex items-center justify-between mb-4 p-3 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
+          <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Total Composite Score</span>
+          <span className="text-xl font-black text-indigo-400">{total.toFixed(1)}<span className="text-sm font-semibold text-indigo-400/70"> / 100</span></span>
         </div>
 
         {/* Bar chart */}
@@ -91,10 +91,10 @@ export function ContributionChart({ data }: { data: any }) {
                 type="category"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fontSize: 12, fontWeight: 700, fill: "#64748b" }}
+                tick={{ fontSize: 12, fontWeight: 700, fill: "#94a3b8" }}
                 width={90}
               />
-              <Tooltip content={<CustomTooltip />} cursor={{ fill: "#f8fafc" }} />
+              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(255,255,255,0.05)" }} />
               <Bar dataKey="contribution" radius={[0, 6, 6, 0]} barSize={26} animationDuration={1200}>
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -102,7 +102,7 @@ export function ContributionChart({ data }: { data: any }) {
                 <LabelList
                   dataKey="label"
                   position="right"
-                  style={{ fontSize: 11, fontWeight: 700, fill: "#64748b" }}
+                  style={{ fontSize: 11, fontWeight: 700, fill: "#94a3b8" }}
                 />
               </Bar>
             </BarChart>
@@ -114,7 +114,7 @@ export function ContributionChart({ data }: { data: any }) {
           {chartData.map((d) => (
             <div key={d.name} className="flex items-center gap-2.5">
               <div className="w-2.5 h-2.5 rounded-sm shrink-0" style={{ background: d.color }} />
-              <span className="text-xs font-bold text-slate-600">{d.name}</span>
+              <span className="text-xs font-bold text-slate-300">{d.name}</span>
               <span className="text-[10px] text-slate-400 font-medium">— {d.desc.split("—")[1]?.trim()}</span>
               <span className="ml-auto text-xs font-black" style={{ color: d.color }}>{d.pct}%</span>
             </div>

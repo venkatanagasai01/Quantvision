@@ -38,13 +38,13 @@ export default function ReportsPage() {
       {/* ── Page Header ─────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-2">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-sm">
               <FileText className="w-4 h-4 text-white" />
             </div>
             Research Reports
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             Generate one-click, institutional-grade stock analysis reports. Each report is a permanent, shareable deep-dive.
           </p>
         </div>
@@ -57,8 +57,7 @@ export default function ReportsPage() {
               type="text"
               placeholder="e.g. NVDA or INFY.NS"
               value={symbol}
-              onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-              className="w-full px-4 py-2.5 text-sm border border-slate-300 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 shadow-sm bg-white uppercase placeholder:normal-case placeholder:text-slate-400 transition-all"
+              className="w-full px-4 py-2.5 text-sm bg-[#0B1120] border border-white/10 text-white rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500/20 shadow-sm uppercase placeholder:normal-case placeholder:text-slate-500 transition-all"
             />
           </div>
           <button
@@ -76,26 +75,25 @@ export default function ReportsPage() {
         </form>
       </div>
 
-      {/* ── What's Inside a Report ───────────────────── */}
-      <div className="info-banner">
+      <div className="info-banner bg-[#0B1120] border border-white/5 rounded-2xl p-6">
         <div className="flex items-start gap-3 mb-4">
-          <div className="w-9 h-9 rounded-xl bg-indigo-100 border border-indigo-200 flex items-center justify-center shrink-0">
-            <Info className="w-5 h-5 text-indigo-600" />
+          <div className="w-9 h-9 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+            <Info className="w-5 h-5 text-indigo-400" />
           </div>
           <div>
-            <div className="font-bold text-indigo-900 text-sm mb-0.5">What's inside each report?</div>
-            <p className="text-sm text-indigo-700 leading-relaxed">
+            <div className="font-bold text-indigo-300 text-sm mb-0.5">What's inside each report?</div>
+            <p className="text-sm text-indigo-400 leading-relaxed">
               Enter any stock ticker and click Generate. Our AI runs a full analysis and creates a permanent, detailed report that includes:
             </p>
           </div>
         </div>
         <div className="flex flex-wrap gap-3">
           {REPORT_INCLUDES.map((item, i) => (
-            <div key={i} className="flex items-center gap-2 bg-white/60 border border-indigo-100 px-3 py-2 rounded-lg">
-              <item.icon className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+            <div key={i} className="flex items-center gap-2 bg-[#0B1120] border border-indigo-500/20 px-3 py-2 rounded-lg">
+              <item.icon className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
               <div>
-                <div className="text-xs font-bold text-indigo-900">{item.title}</div>
-                <div className="text-[10px] text-indigo-500">{item.desc}</div>
+                <div className="text-xs font-bold text-indigo-300">{item.title}</div>
+                <div className="text-[10px] text-indigo-400/80">{item.desc}</div>
               </div>
             </div>
           ))}
@@ -105,9 +103,9 @@ export default function ReportsPage() {
       {/* ── Reports Table ────────────────────────────── */}
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <h2 className="text-xs font-black text-slate-500 uppercase tracking-widest">All Generated Reports</h2>
+          <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest">All Generated Reports</h2>
           <div className="tooltip-container">
-            <HelpCircle className="w-3 h-3 text-slate-300 cursor-help" />
+            <HelpCircle className="w-3 h-3 text-slate-500 cursor-help" />
             <div className="tooltip-box w-56">Click any report to open the full detailed analysis. Reports are stored permanently.</div>
           </div>
         </div>

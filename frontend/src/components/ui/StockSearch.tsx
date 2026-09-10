@@ -49,7 +49,7 @@ export function StockSearch() {
   return (
     <div ref={wrapperRef} className="relative w-full">
       <div className="relative flex items-center">
-        <Search className="absolute left-0 w-4 h-4 text-gray-400" strokeWidth={1.5} />
+        <Search className="absolute left-0 w-4 h-4 text-slate-400" strokeWidth={1.5} />
         <input 
           type="text" 
           value={query}
@@ -64,24 +64,24 @@ export function StockSearch() {
             }
           }}
           placeholder="Search symbol, company, or ISIN..." 
-          className="w-full pl-8 pr-4 py-2 bg-transparent text-sm text-gray-900 focus:outline-none placeholder:text-gray-400"
+          className="w-full pl-8 pr-4 py-2 bg-transparent text-sm text-white focus:outline-none placeholder:text-slate-500"
         />
       </div>
 
       {/* Autocomplete Dropdown */}
       {isOpen && query.length > 0 && (
-        <div className="absolute top-full left-0 mt-2 w-full max-h-80 overflow-y-auto bg-white border border-gray-200 shadow-lg rounded-md z-50">
+        <div className="absolute top-full left-0 mt-2 w-full max-h-80 overflow-y-auto bg-[#0B1120] border border-white/10 shadow-xl shadow-black/50 rounded-md z-50">
           <ul className="py-2">
             {filteredStocks.length > 0 ? (
               filteredStocks.map((stock) => (
                 <li 
                   key={stock.symbol}
                   onClick={() => handleSelect(stock.symbol)}
-                  className="px-4 py-2 hover:bg-blue-50 cursor-pointer flex justify-between items-center group transition-colors"
+                  className="px-4 py-2 hover:bg-white/5 cursor-pointer flex justify-between items-center group transition-colors"
                 >
                   <div>
-                    <div className="font-bold text-gray-900 text-sm group-hover:text-blue-700">{stock.symbol}</div>
-                    <div className="text-xs text-gray-500 font-medium">{stock.name}</div>
+                    <div className="font-bold text-white text-sm group-hover:text-indigo-400">{stock.symbol}</div>
+                    <div className="text-xs text-slate-400 font-medium">{stock.name}</div>
                   </div>
                 </li>
               ))
@@ -91,10 +91,10 @@ export function StockSearch() {
             {!filteredStocks.find(s => s.symbol.toLowerCase() === query.toLowerCase()) && (
               <li 
                 onClick={() => handleSelect(query.toUpperCase())}
-                className="px-4 py-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 border-t border-gray-100"
+                className="px-4 py-3 hover:bg-white/5 cursor-pointer flex items-center gap-3 border-t border-white/5"
               >
-                <Search className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-700">
+                <Search className="w-4 h-4 text-indigo-400" />
+                <span className="text-sm font-medium text-indigo-400">
                   Search for "{query.toUpperCase()}"
                 </span>
               </li>
